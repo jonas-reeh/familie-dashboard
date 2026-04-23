@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Familie Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #0a0f1e;
+    color: #e8e4d8;
+    min-height: 100vh;
+  }
+  .bg {
+    position: fixed; inset: 0; z-index: 0;
+    background: linear-gradient(160deg, #0a0f1e 0%, #0d1832 40%, #0a1628 100%);
+  }
+  .bg canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .55; }
+  .page { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+  /* SETUP */
+  .setup { display: flex; align-items: center; justify-content: center; flex: 1; padding: 2rem; }
+  .card {
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 24px; padding: 2.5rem; max-width: 520px; width: 100%;
+    backdrop-filter: blur(20px);
+  }
+  .card h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #f0ead8; margin-bottom: .4rem; }
+  .card .sub { font-size: .85rem; color: rgba(232,228,216,.5); margin-bottom: 2rem; line-height: 1.6; }
+  .lbl { font-size: .7rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: rgba(232,228,216,.45); display: block; margin-bottom: .4rem; }
+  .inp {
+    width: 100%; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    border-radius: 10px; padding: .75rem 1rem; color: #e8e4d8;
+    font-family: 'DM Sans', sans-serif; font-size: .95rem; outline: none;
+    margin-bottom: 1.2rem; transition: border-color .2s;
+  }
+  .inp:focus { border-color: rgba(255,200,100,.4); }
+  .inp::placeholder { color: rgba(232,228,216,.2); }
+  .hint { font-size: .72rem; color: rgba(232,228,216,.3); margin-top: -.8rem; margin-bottom: 1.2rem; }
+  .btn {
+    width: 100%; padding: .95rem;
+    background: linear-gradient(135deg, #c8902a, #e8b84b);
+    border: none; border-radius: 12px; color: #0a0f1e;
+    font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500;
+    cursor: pointer; margin-top: .5rem; transition: opacity .2s;
+  }
+  .btn:hover { opacity: .88; }
+  .err { font-size: .8rem; color: rgba(255,140,140,.7); margin-top: .6rem; min-height: 1.2rem; }
+
+  /* DASHBOARD */
+  .dash { display: none; flex-direction: column; flex: 1; padding: 1.8rem; gap: 1.2rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+  .top-row { display: flex; justify-content: space-between; align-items: flex-start; }
+  .clock { font-family: 'Playfair Display', serif; font-size: 5rem; font-weight: 400; line-height: 1; letter-spacing: -3px; color: #f0ead8; }
+  .dateline { font-size: .95rem; color: rgba(232,228,216,.45); margin-top: .3rem; text-transform: capitalize; }
+  .wblock { text-align: right; }
+  .wtemp { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 400; color: #f0ead8; line-height: 1; }
+  .wdesc { font-size: .88rem; color: rgba(232,228,216,.5); margin-top: .2rem; }
+  .wloc { font-size: .72rem; color: rgba(232,228,216,.3); margin-top: .1rem; }
+  .wextras { font-size: .75rem; color: rgba(232,228,216,.35); margin-top: .2rem; }
+
+  .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .imgbox {
+    border-radius: 18px; overflow: hidden; aspect-ratio: 4/3;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+    display: flex; align-items: center; justify-content: center; position: relative;
+  }
+  .imgbox img { width: 100%; height: 100%; object-fit: cover; }
+  .imgph { text-align: center; padding: 2rem; color: rgba(232,228,216,.3); font-size: .85rem; line-height: 1.8; }
+  .imgph .ico { font-size: 2.5rem; opacity: .3; display: block; margin-bottom: .8rem; }
+
+  .msgbox {
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px; padding: 1.6rem; display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .mlabel { font-size: .68rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: rgba(232,228,216,.3); margin-bottom: 1rem; }
+  .kids-head { font-size: .7rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: #e8b84b; margin-bottom: .5rem; opacity: .8; }
+  .kids-txt { font-size: 1rem; line-height: 1.65; color: #e8e4d8; }
+  .adult-area { border-top: 1px solid rgba(255,255,255,.08); padding-top: 1.1rem; margin-top: 1.2rem; }
+  .adult-head { font-size: .7rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: rgba(180,160,220,.65); margin-bottom: .5rem; }
+  .adult-txt { font-size: .88rem; line-height: 1.6; color: rgba(232,228,216,.65); font-style: italic; }
+
+  .agenda-box { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; padding: 1.4rem; }
+  .agenda-items { display: flex; flex-direction: column; gap: .5rem; margin-top: .8rem; }
+  .aitem { display: flex; align-items: center; gap: .9rem; padding: .7rem .9rem; background: rgba(255,255,255,.03); border-radius: 10px; border: 1px solid rgba(255,255,255,.05); }
+  .atime { font-size: .78rem; color: rgba(232,228,216,.38); min-width: 52px; }
+  .adot { width: 5px; height: 5px; border-radius: 50%; background: #e8b84b; flex-shrink: 0; }
+  .atitle { font-size: .93rem; color: #e8e4d8; }
+  .noevt { font-size: .85rem; color: rgba(232,228,216,.25); text-align: center; padding: .8rem; }
+
+  .statusbar { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,.06); padding: .8rem 1.8rem; }
+  .sdot { width: 5px; height: 5px; border-radius: 50%; background: #4ade80; }
+  .sdot.spin { background: #e8b84b; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.25} }
+  .stext { font-size: .73rem; color: rgba(232,228,216,.3); display: flex; align-items: center; gap: .4rem; }
+  .rbtn { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 8px; padding: .35rem .75rem; color: rgba(232,228,216,.45); font-size: .73rem; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .2s; }
+  .rbtn:hover { background: rgba(255,255,255,.1); color: rgba(232,228,216,.8); }
+  .gbtn { position: fixed; bottom: 1.2rem; right: 1.2rem; z-index: 10; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 50%; width: 38px; height: 38px; display: none; align-items: center; justify-content: center; cursor: pointer; font-size: .95rem; color: rgba(232,228,216,.35); transition: all .2s; }
+  .gbtn:hover { background: rgba(255,255,255,.12); }
+</style>
+</head>
+<body>
+
+<div class="bg"><canvas id="stars"></canvas></div>
+<div class="page">
+
+<!-- SETUP SCREEN -->
+<div class="setup" id="setupEl">
+  <div class="card">
+    <h1>Familie Dashboard</h1>
+    <p class="sub">Vejrdata fra DMI – helt gratis, ingen vejr-nøgle nødvendig. Du skal kun bruge din Anthropic API-nøgle til de daglige beskeder fra Claude.</p>
+
+    <label class="lbl">Anthropic API-nøgle</label>
+    <input class="inp" type="password" id="apiKey" placeholder="sk-ant-api03-..." />
+    <div class="hint">Få din nøgle på console.anthropic.com</div>
+
+    <label class="lbl">Din by</label>
+    <input class="inp" type="text" id="cityIn" placeholder="fx København, Aarhus, Odense..." value="København" />
+
+    <label class="lbl">Familiens navne</label>
+    <input class="inp" type="text" id="familyIn" placeholder="fx Jonas, Maria og 3 børn" />
+
+    <button class="btn" onclick="startDash()">Start dashboard →</button>
+    <p class="err" id="setupErr"></p>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dash" id="dashEl">
+  <div class="top-row">
+    <div>
+      <div class="clock" id="clockEl">--:--</div>
+      <div class="dateline" id="dateEl"></div>
+    </div>
+    <div class="wblock">
+      <div class="wtemp" id="wtempEl">–°</div>
+      <div class="wdesc" id="wdescEl">Henter DMI vejr...</div>
+      <div class="wloc" id="wlocEl"></div>
+      <div class="wextras" id="wextrasEl"></div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="imgbox" id="imgbox">
+      <div class="imgph">
+        <span class="ico">🌤</span>
+        Vejrbillede kan tilføjes<br>via en billed-API
+      </div>
+    </div>
+    <div class="msgbox">
+      <div>
+        <div class="mlabel">Dagens besked</div>
+        <div class="kids-head">Til børnene 🧒</div>
+        <p class="kids-txt" id="kidsTxt">Henter dagens besked...</p>
+      </div>
+      <div class="adult-area">
+        <div class="adult-head">Til de voksne ✨</div>
+        <p class="adult-txt" id="adultTxt"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="agenda-box">
+    <div class="mlabel">Dagens program</div>
+    <div class="agenda-items" id="agendaEl">
+      <div class="noevt">Ingen kalenderdata – tilføj Google Calendar-integration for at se familiens aftaler</div>
+    </div>
+  </div>
+</div>
+
+<div class="statusbar" id="statusbar" style="display:none">
+  <div class="stext"><div class="sdot" id="sdot"></div><span id="stxt">Klar</span></div>
+  <div class="stext" id="updatedEl">Opdateret nu</div>
+  <button class="rbtn" onclick="refreshAll()">↻ Opdater</button>
+</div>
+
+</div>
+
+<button class="gbtn" id="gbtn" onclick="showSetup()">⚙</button>
+
+<script>
+let CFG = {};
+
+const CITY_COORDS = {
+  'københavn': [55.676, 12.568], 'kobenhavn': [55.676, 12.568],
+  'copenhagen': [55.676, 12.568], 'aarhus': [56.162, 10.203],
+  'arhus': [56.162, 10.203], 'odense': [55.396, 10.388],
+  'aalborg': [57.048, 9.921], 'esbjerg': [55.467, 8.452],
+  'randers': [56.461, 10.036], 'kolding': [55.490, 9.472],
+  'horsens': [55.860, 9.849], 'vejle': [55.709, 9.536],
+  'roskilde': [55.642, 12.080], 'helsingør': [56.037, 12.613],
+  'helsingor': [56.037, 12.613], 'hillerød': [55.929, 12.308],
+  'hillerod': [55.929, 12.308], 'silkeborg': [56.169, 9.549],
+  'næstved': [55.230, 11.762], 'naestved': [55.230, 11.762],
+  'fredericia': [55.566, 9.752], 'viborg': [56.453, 9.401],
+  'holstebro': [56.360, 8.615], 'slagelse': [55.403, 11.354],
+  'frederiksberg': [55.678, 12.524], 'gentofte': [55.751, 12.535],
+  'gladsaxe': [55.737, 12.489], 'lyngby': [55.771, 12.503],
+  'hellerup': [55.726, 12.577], 'charlottenlund': [55.757, 12.587],
+};
+
+function getCityCoords(input) {
+  const key = input.toLowerCase().trim()
+    .replace(/æ/g,'ae').replace(/ø/g,'o').replace(/å/g,'aa');
+  if (CITY_COORDS[key]) return CITY_COORDS[key];
+  for (const [k, v] of Object.entries(CITY_COORDS)) {
+    if (k !== 'default' && (key.includes(k) || k.includes(key))) return v;
+  }
+  return [55.676, 12.568]; // Default: København
+}
+
+function startDash() {
+  const apiKey = document.getElementById('apiKey').value.trim();
+  const city = document.getElementById('cityIn').value.trim() || 'København';
+  const family = document.getElementById('familyIn').value.trim() || 'familien';
+  if (!apiKey) {
+    document.getElementById('setupErr').textContent = 'Udfyld venligst din Anthropic API-nøgle.';
+    return;
+  }
+  const coords = getCityCoords(city);
+  CFG = { apiKey, city, family, lat: coords[0], lon: coords[1] };
+  try { localStorage.setItem('fdCFG2', JSON.stringify(CFG)); } catch(e) {}
+  document.getElementById('setupEl').style.display = 'none';
+  document.getElementById('dashEl').style.display = 'flex';
+  document.getElementById('statusbar').style.display = 'flex';
+  document.getElementById('gbtn').style.display = 'flex';
+  initDash();
+}
+
+function showSetup() {
+  document.getElementById('dashEl').style.display = 'none';
+  document.getElementById('statusbar').style.display = 'none';
+  document.getElementById('gbtn').style.display = 'none';
+  document.getElementById('setupEl').style.display = 'flex';
+  if (CFG.apiKey) document.getElementById('apiKey').value = CFG.apiKey;
+  if (CFG.city) document.getElementById('cityIn').value = CFG.city;
+  if (CFG.family) document.getElementById('familyIn').value = CFG.family;
+}
+
+function initDash() {
+  updateClock();
+  setInterval(updateClock, 1000);
+  refreshAll();
+  scheduleMorning();
+}
+
+const DAYS = ['søndag','mandag','tirsdag','onsdag','torsdag','fredag','lørdag'];
+const MONTHS = ['januar','februar','marts','april','maj','juni','juli','august','september','oktober','november','december'];
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clockEl').textContent =
+    String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('dateEl').textContent =
+    `${DAYS[now.getDay()]}, ${now.getDate()}. ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+}
+
+function scheduleMorning() {
+  const now = new Date();
+  const next = new Date(now);
+  next.setDate(next.getDate() + 1);
+  next.setHours(6, 0, 0, 0);
+  setTimeout(() => { refreshAll(); scheduleMorning(); }, next - now);
+}
+
+async function refreshAll() {
+  setStatus('load', 'Opdaterer...');
+  await fetchDMI();
+  await genMessage();
+  const t = new Date().toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
+  setStatus('ok', `Sidst opdateret kl. ${t}`);
+}
+
+async function fetchDMI() {
+  try {
+    const { lat, lon, city } = CFG;
+    const params = 'temperature-2m,precipitation-rate,wind-speed-10m,relative-humidity-2m';
+    const url = `https://opendataapi.dmi.dk/v1/forecastedr/collections/harmonie_dini_sf/position?coords=POINT(${lon}%20${lat})&crs=crs84&parameter-name=${params}&f=GeoJSON`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`DMI HTTP ${res.status}`);
+    const data = await res.json();
+    const feat = data.features?.[0];
+    if (!feat) throw new Error('Ingen features i DMI svar');
+    const p = feat.properties;
+
+    const tempK = p['temperature-2m'];
+    const temp = tempK ? Math.round(tempK - 273.15) : null;
+    const precipRate = p['precipitation-rate'] ?? 0;
+    const precipMmH = Math.round(precipRate * 3600 * 10) / 10;
+    const wind = p['wind-speed-10m'] ? Math.round(p['wind-speed-10m']) : null;
+    const humidity = p['relative-humidity-2m'] ? Math.round(p['relative-humidity-2m']) : null;
+
+    let desc = 'Overskyet';
+    if (precipMmH > 5) desc = temp !== null && temp < 2 ? 'Kraftigt snefald' : 'Kraftig regn';
+    else if (precipMmH > 1) desc = temp !== null && temp < 2 ? 'Snefald' : 'Regn';
+    else if (precipMmH > 0.1) desc = temp !== null && temp < 2 ? 'Let sne' : 'Byger';
+    else if (humidity !== null && humidity < 60) desc = 'Solrigt';
+    else desc = 'Overskyet';
+
+    document.getElementById('wtempEl').textContent = temp !== null ? `${temp}°` : '–°';
+    document.getElementById('wdescEl').textContent = desc;
+    document.getElementById('wlocEl').textContent = `DMI · ${city}`;
+    document.getElementById('wextrasEl').textContent =
+      [wind !== null ? `Vind ${wind} m/s` : '', humidity !== null ? `Fugt ${humidity}%` : ''].filter(Boolean).join(' · ');
+
+    CFG.weather = { temp, desc, precipMmH, wind, humidity };
+    updateStars(desc);
+  } catch(e) {
+    console.error('DMI fejl:', e);
+    document.getElementById('wdescEl').textContent = 'DMI data utilgængelig';
+    CFG.weather = null;
+  }
+}
+
+function updateStars(desc) {
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const isRain = desc && (desc.includes('regn') || desc.includes('byger') || desc.includes('sne'));
+  const color = isRain ? '#8899cc' : '#ffd080';
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let i = 0; i < 220; i++) {
+    ctx.beginPath();
+    ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 1.4, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.globalAlpha = Math.random() * .55 + .08;
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+async function genMessage() {
+  const w = CFG.weather;
+  const now = new Date();
+  const winfo = w
+    ? `${w.temp}°C, ${w.desc}, vind ${w.wind} m/s, nedbør ${w.precipMmH} mm/t, fugtighed ${w.humidity}%`
+    : 'vejrdata ikke tilgængelig';
+
+  const prompt = `Du er en varm og sjov stemme på en familieskærm i køkkenet for ${CFG.family}.
+
+I dag er det ${DAYS[now.getDay()]} i ${MONTHS[now.getMonth()]}. VEJR: ${winfo}.
+
+Skriv to korte beskeder:
+
+1. BØRNEBESKED (2-3 sætninger): Fortæl præcist hvad de skal have på i dag.${w && w.temp > 18 ? ' Nævn solcreme.' : ''}${w && w.precipMmH > 0.3 ? ' Nævn regnjakke eller paraply.' : ''}${w && w.temp < 10 ? ' Det er koldt – varm jakke.' : ''} Vær konkret og sjov. Enkle ord til børn.
+
+2. VOKSENBESKED (1-2 sætninger): En varm, poetisk påmindelse til de voksne om at nyde livet og være til stede i nuet – relevant for dagen og årstiden.
+
+Svar KUN med JSON uden markdown eller forklaring:
+{"kids":"...","adults":"..."}`;
+
+  try {
+    document.getElementById('kidsTxt').textContent = 'Genererer...';
+    document.getElementById('adultTxt').textContent = '';
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': CFG.apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 400,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const txt = data.content?.[0]?.text || '';
+    let parsed;
+    try { parsed = JSON.parse(txt.replace(/```json|```/g, '').trim()); }
+    catch { parsed = { kids: txt, adults: '' }; }
+    document.getElementById('kidsTxt').textContent = parsed.kids || '–';
+    document.getElementById('adultTxt').textContent = parsed.adults || '';
+  } catch(e) {
+    document.getElementById('kidsTxt').textContent = 'Kunne ikke hente besked – tjek din API-nøgle.';
+  }
+}
+
+function setStatus(type, txt) {
+  document.getElementById('sdot').className = 'sdot' + (type === 'load' ? ' spin' : '');
+  document.getElementById('updatedEl').textContent = txt;
+}
+
+// Init
+window.addEventListener('load', () => {
+  try {
+    const saved = localStorage.getItem('fdCFG2');
+    if (saved) {
+      CFG = JSON.parse(saved);
+      document.getElementById('setupEl').style.display = 'none';
+      document.getElementById('dashEl').style.display = 'flex';
+      document.getElementById('statusbar').style.display = 'flex';
+      document.getElementById('gbtn').style.display = 'flex';
+      initDash();
+    }
+  } catch(e) {}
+
+  // Stjerner
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  for (let i = 0; i < 220; i++) {
+    ctx.beginPath();
+    ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 1.4, 0, Math.PI * 2);
+    ctx.fillStyle = '#aabbdd';
+    ctx.globalAlpha = Math.random() * .5 + .08;
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+});
+</script>
+</body>
+</html>
