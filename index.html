@@ -11,11 +11,10 @@
   .bg { position: fixed; inset: 0; z-index: 0; background: linear-gradient(160deg, #0a0f1e 0%, #0d1832 40%, #0a1628 100%); }
   .bg canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .55; }
   .page { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
-
   .setup { display: flex; align-items: center; justify-content: center; flex: 1; padding: 2rem; }
   .card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 24px; padding: 2.5rem; max-width: 520px; width: 100%; }
   .card h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #f0ead8; margin-bottom: .4rem; }
-  .card .sub { font-size: .85rem; color: rgba(232,228,216,.5); margin-bottom: 2rem; line-height: 1.6; }
+  .sub { font-size: .85rem; color: rgba(232,228,216,.5); margin-bottom: 2rem; line-height: 1.6; }
   .lbl { font-size: .7rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: rgba(232,228,216,.45); display: block; margin-bottom: .4rem; }
   .inp { width: 100%; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 10px; padding: .75rem 1rem; color: #e8e4d8; font-family: 'DM Sans', sans-serif; font-size: .95rem; outline: none; margin-bottom: 1.2rem; transition: border-color .2s; }
   .inp:focus { border-color: rgba(255,200,100,.4); }
@@ -23,8 +22,7 @@
   .hint { font-size: .72rem; color: rgba(232,228,216,.3); margin-top: -.8rem; margin-bottom: 1.2rem; }
   .btn { width: 100%; padding: .95rem; background: linear-gradient(135deg, #c8902a, #e8b84b); border: none; border-radius: 12px; color: #0a0f1e; font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500; cursor: pointer; margin-top: .5rem; transition: opacity .2s; }
   .btn:hover { opacity: .88; }
-  .err { font-size: .8rem; color: rgba(255,140,140,.7); margin-top: .6rem; min-height: 1.2rem; }
-
+  .err { font-size: .8rem; color: rgba(255,140,140,.7); margin-top: .6rem; min-height: 1.2rem; line-height: 1.5; }
   .dash { display: none; flex-direction: column; flex: 1; padding: 1.8rem; gap: 1.2rem; max-width: 1100px; margin: 0 auto; width: 100%; }
   .top-row { display: flex; justify-content: space-between; align-items: flex-start; }
   .clock { font-family: 'Playfair Display', serif; font-size: 5rem; font-weight: 400; line-height: 1; letter-spacing: -3px; color: #f0ead8; }
@@ -34,12 +32,10 @@
   .wdesc { font-size: .88rem; color: rgba(232,228,216,.5); margin-top: .2rem; }
   .wloc { font-size: .72rem; color: rgba(232,228,216,.3); margin-top: .1rem; }
   .wextras { font-size: .75rem; color: rgba(232,228,216,.35); margin-top: .2rem; }
-
   .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
   .imgbox { border-radius: 18px; overflow: hidden; aspect-ratio: 4/3; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center; }
-  .imgph { text-align: center; padding: 2rem; color: rgba(232,228,216,.3); font-size: .85rem; line-height: 1.8; }
-  .imgph .ico { font-size: 2.5rem; opacity: .3; display: block; margin-bottom: .8rem; }
-
+  .imgph { text-align: center; padding: 2rem; color: rgba(232,228,216,.25); font-size: .85rem; line-height: 1.8; }
+  .ico { font-size: 5rem; display: block; margin-bottom: .5rem; }
   .msgbox { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; padding: 1.6rem; display: flex; flex-direction: column; justify-content: space-between; }
   .mlabel { font-size: .68rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: rgba(232,228,216,.3); margin-bottom: 1rem; }
   .kids-head { font-size: .7rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: #e8b84b; margin-bottom: .5rem; opacity: .8; }
@@ -47,15 +43,8 @@
   .adult-area { border-top: 1px solid rgba(255,255,255,.08); padding-top: 1.1rem; margin-top: 1.2rem; }
   .adult-head { font-size: .7rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: rgba(180,160,220,.65); margin-bottom: .5rem; }
   .adult-txt { font-size: .88rem; line-height: 1.6; color: rgba(232,228,216,.65); font-style: italic; }
-
   .agenda-box { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; padding: 1.4rem; }
-  .agenda-items { display: flex; flex-direction: column; gap: .5rem; margin-top: .8rem; }
-  .aitem { display: flex; align-items: center; gap: .9rem; padding: .7rem .9rem; background: rgba(255,255,255,.03); border-radius: 10px; border: 1px solid rgba(255,255,255,.05); }
-  .atime { font-size: .78rem; color: rgba(232,228,216,.38); min-width: 52px; }
-  .adot { width: 5px; height: 5px; border-radius: 50%; background: #e8b84b; flex-shrink: 0; }
-  .atitle { font-size: .93rem; color: #e8e4d8; }
   .noevt { font-size: .85rem; color: rgba(232,228,216,.25); text-align: center; padding: .8rem; }
-
   .statusbar { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,.06); padding: .8rem 1.8rem; }
   .sdot { width: 5px; height: 5px; border-radius: 50%; background: #4ade80; }
   .sdot.spin { background: #e8b84b; animation: pulse 1s infinite; }
@@ -63,36 +52,25 @@
   .stext { font-size: .73rem; color: rgba(232,228,216,.3); display: flex; align-items: center; gap: .4rem; }
   .rbtn { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 8px; padding: .35rem .75rem; color: rgba(232,228,216,.45); font-size: .73rem; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .2s; }
   .rbtn:hover { background: rgba(255,255,255,.1); color: rgba(232,228,216,.8); }
-  .gbtn { position: fixed; bottom: 1.2rem; right: 1.2rem; z-index: 10; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 50%; width: 38px; height: 38px; display: none; align-items: center; justify-content: center; cursor: pointer; font-size: .95rem; color: rgba(232,228,216,.35); transition: all .2s; }
-  .gbtn:hover { background: rgba(255,255,255,.12); }
-
-  @media (max-width: 700px) {
-    .hero { grid-template-columns: 1fr; }
-    .clock { font-size: 3.5rem; }
-    .wtemp { font-size: 2.5rem; }
-  }
+  .gbtn { position: fixed; bottom: 1.2rem; right: 1.2rem; z-index: 10; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 50%; width: 38px; height: 38px; display: none; align-items: center; justify-content: center; cursor: pointer; font-size: .95rem; color: rgba(232,228,216,.35); }
+  @media (max-width: 700px) { .hero { grid-template-columns: 1fr; } .clock { font-size: 3.5rem; } .wtemp { font-size: 2.5rem; } .dash { padding: 1rem; } }
 </style>
 </head>
 <body>
-
 <div class="bg"><canvas id="stars"></canvas></div>
 <div class="page">
 
 <div class="setup" id="setupEl">
   <div class="card">
     <h1>Familie Dashboard</h1>
-    <p class="sub">Indtast din Anthropic API-nøgle – Claude henter selv vejret fra DMI og genererer dagens beskeder.</p>
-
+    <p class="sub">Vejrdata hentes automatisk fra Open-Meteo – gratis og uden nøgle. Du skal kun bruge din Anthropic API-nøgle til de daglige beskeder.</p>
     <label class="lbl">Anthropic API-nøgle</label>
     <input class="inp" type="password" id="apiKey" placeholder="sk-ant-api03-..." />
-    <div class="hint">Hent din nøgle på <a href="https://console.anthropic.com" style="color:#e8b84b;">console.anthropic.com</a> under "API Keys"</div>
-
+    <div class="hint">Hent nøglen på console.anthropic.com under "API Keys"</div>
     <label class="lbl">Din by</label>
-    <input class="inp" type="text" id="cityIn" placeholder="fx København, Aarhus, Odense..." value="København" />
-
+    <input class="inp" type="text" id="cityIn" value="København" />
     <label class="lbl">Familiens navne</label>
     <input class="inp" type="text" id="familyIn" placeholder="fx Jonas, kone og 3 børn" />
-
     <button class="btn" onclick="startDash()">Start dashboard →</button>
     <p class="err" id="setupErr"></p>
   </div>
@@ -111,19 +89,15 @@
       <div class="wextras" id="wextrasEl"></div>
     </div>
   </div>
-
   <div class="hero">
     <div class="imgbox">
-      <div class="imgph">
-        <span class="ico">🌤</span>
-        Vejrbillede kan tilføjes<br>via en billed-API
-      </div>
+      <div class="imgph"><span class="ico" id="weatherIcon">🌤</span>Open-Meteo vejrdata</div>
     </div>
     <div class="msgbox">
       <div>
         <div class="mlabel">Dagens besked</div>
         <div class="kids-head">Til børnene 🧒</div>
-        <p class="kids-txt" id="kidsTxt">Henter dagens besked...</p>
+        <p class="kids-txt" id="kidsTxt">Henter...</p>
       </div>
       <div class="adult-area">
         <div class="adult-head">Til de voksne ✨</div>
@@ -131,40 +105,58 @@
       </div>
     </div>
   </div>
-
   <div class="agenda-box">
     <div class="mlabel">Dagens program</div>
-    <div class="agenda-items" id="agendaEl">
-      <div class="noevt">Ingen kalenderdata – Google Calendar kan tilføjes i næste version</div>
-    </div>
+    <div class="noevt">Google Calendar kan tilføjes i næste version</div>
   </div>
 </div>
 
 <div class="statusbar" id="statusbar" style="display:none">
-  <div class="stext"><div class="sdot" id="sdot"></div><span id="stxt">Klar</span></div>
+  <div class="stext"><div class="sdot" id="sdot"></div><span></span></div>
   <div class="stext" id="updatedEl"></div>
   <button class="rbtn" onclick="refreshAll()">↻ Opdater</button>
 </div>
-
 </div>
-
 <button class="gbtn" id="gbtn" onclick="showSetup()">⚙</button>
 
 <script>
 let CFG = {};
 const DAYS = ['søndag','mandag','tirsdag','onsdag','torsdag','fredag','lørdag'];
 const MONTHS = ['januar','februar','marts','april','maj','juni','juli','august','september','oktober','november','december'];
+const WMO = {
+  0:['Klar himmel','☀️'],1:['Overvejende klart','🌤'],2:['Delvist skyet','⛅'],3:['Overskyet','☁️'],
+  45:['Tåge','🌫'],48:['Rimtåge','🌫'],51:['Let støvregn','🌦'],53:['Støvregn','🌦'],55:['Kraftig støvregn','🌧'],
+  61:['Let regn','🌧'],63:['Regn','🌧'],65:['Kraftig regn','🌧'],71:['Let sne','🌨'],73:['Snefald','❄️'],
+  75:['Kraftigt snefald','❄️'],80:['Lette byger','🌦'],81:['Byger','🌧'],82:['Kraftige byger','⛈'],
+  85:['Snebyger','🌨'],95:['Tordenvejr','⛈'],96:['Tordenvejr m. hagl','⛈'],99:['Kraftigt tordenvejr','⛈']
+};
+const COORDS = {
+  'københavn':[55.676,12.568],'kobenhavn':[55.676,12.568],'copenhagen':[55.676,12.568],
+  'aarhus':[56.162,10.203],'arhus':[56.162,10.203],'odense':[55.396,10.388],
+  'aalborg':[57.048,9.921],'esbjerg':[55.467,8.452],'randers':[56.461,10.036],
+  'kolding':[55.490,9.472],'horsens':[55.860,9.849],'vejle':[55.709,9.536],
+  'roskilde':[55.642,12.080],'helsingør':[56.037,12.613],'helsingor':[56.037,12.613],
+  'hillerød':[55.929,12.308],'hillerod':[55.929,12.308],'silkeborg':[56.169,9.549],
+  'frederiksberg':[55.678,12.524],'gentofte':[55.751,12.535],'lyngby':[55.771,12.503],
+  'birkerød':[55.842,12.428],'birkerod':[55.842,12.428],'allerød':[55.868,12.351],
+  'holte':[55.808,12.470],'vedbæk':[55.848,12.564],'vedbaek':[55.848,12.564],
+};
+
+function getCoords(city) {
+  const k = city.toLowerCase().replace(/æ/g,'ae').replace(/ø/g,'o').replace(/å/g,'aa').trim();
+  if (COORDS[k]) return COORDS[k];
+  for (const [key,val] of Object.entries(COORDS)) { if (k.includes(key)||key.includes(k)) return val; }
+  return [55.676,12.568];
+}
 
 function startDash() {
   const apiKey = document.getElementById('apiKey').value.trim();
   const city = document.getElementById('cityIn').value.trim() || 'København';
   const family = document.getElementById('familyIn').value.trim() || 'familien';
-  if (!apiKey) {
-    document.getElementById('setupErr').textContent = 'Udfyld venligst din Anthropic API-nøgle.';
-    return;
-  }
-  CFG = { apiKey, city, family };
-  try { localStorage.setItem('fdCFG3', JSON.stringify(CFG)); } catch(e) {}
+  if (!apiKey) { document.getElementById('setupErr').textContent = 'Udfyld din Anthropic API-nøgle.'; return; }
+  const coords = getCoords(city);
+  CFG = { apiKey, city, family, lat: coords[0], lon: coords[1] };
+  try { localStorage.setItem('fdCFG4', JSON.stringify(CFG)); } catch(e) {}
   document.getElementById('setupEl').style.display = 'none';
   document.getElementById('dashEl').style.display = 'flex';
   document.getElementById('statusbar').style.display = 'flex';
@@ -183,208 +175,94 @@ function showSetup() {
 }
 
 function initDash() {
-  updateClock();
-  setInterval(updateClock, 1000);
-  refreshAll();
-  scheduleMorning();
+  updateClock(); setInterval(updateClock, 1000);
+  refreshAll(); scheduleMorning();
 }
 
 function updateClock() {
-  const now = new Date();
-  document.getElementById('clockEl').textContent =
-    String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
-  document.getElementById('dateEl').textContent =
-    `${DAYS[now.getDay()]}, ${now.getDate()}. ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
+  const n = new Date();
+  document.getElementById('clockEl').textContent = String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+  document.getElementById('dateEl').textContent = `${DAYS[n.getDay()]}, ${n.getDate()}. ${MONTHS[n.getMonth()]} ${n.getFullYear()}`;
 }
 
 function scheduleMorning() {
-  const now = new Date();
-  const next = new Date(now);
-  next.setDate(next.getDate() + 1);
-  next.setHours(6, 0, 0, 0);
-  setTimeout(() => { refreshAll(); scheduleMorning(); }, next - now);
+  const n = new Date(), next = new Date(n);
+  next.setDate(next.getDate()+1); next.setHours(6,0,0,0);
+  setTimeout(() => { refreshAll(); scheduleMorning(); }, next-n);
 }
 
 async function refreshAll() {
-  setStatus('load', 'Opdaterer...');
-  await fetchWeatherAndMessage();
-  const t = new Date().toLocaleTimeString('da-DK', { hour: '2-digit', minute: '2-digit' });
-  setStatus('ok', `Sidst opdateret kl. ${t}`);
+  setStatus('load','Opdaterer...');
+  const w = await fetchWeather();
+  if (w) await genMessage(w);
+  setStatus('ok', `Opdateret kl. ${new Date().toLocaleTimeString('da-DK',{hour:'2-digit',minute:'2-digit'})}`);
 }
 
-async function fetchWeatherAndMessage() {
-  const now = new Date();
-  const dayName = DAYS[now.getDay()];
-  const monthName = MONTHS[now.getMonth()];
-
-  const prompt = `Du er en assistent på et familieskærm-dashboard i køkkenet for ${CFG.family}.
-
-I dag er det ${dayName} den ${now.getDate()}. ${monthName} ${now.getFullYear()}.
-
-Brug web_search til at slå det aktuelle vejr op for ${CFG.city}, Danmark lige nu. Søg efter "vejr ${CFG.city} i dag".
-
-Baseret på vejret skal du returnere JSON med disse felter:
-- temp: temperatur i grader Celsius som heltal (kun tallet, ingen °)
-- desc: kort vejrbeskrivelse på dansk (fx "Delvist skyet", "Regn", "Solrigt", "Overskyet", "Byger", "Let regn")
-- wind: vindstyrke i m/s som heltal
-- humidity: luftfugtighed i % som heltal (estimer hvis ikke tilgængeligt)
-- kids: børnebesked på 2-3 sætninger – hvad skal de have på i dag? Vær konkret og sjov. Nævn solcreme hvis over 18 grader, regnjakke hvis regn/byger, tyk jakke hvis under 10 grader.
-- adults: voksenbesked på 1-2 sætninger – en varm poetisk påmindelse om at nyde livet og være i nuet, relevant for ${dayName} og ${monthName}.
-
-Svar KUN med JSON uden markdown eller forklaring:
-{"temp":18,"desc":"Delvist skyet","wind":4,"humidity":65,"kids":"...","adults":"..."}`;
-
+async function fetchWeather() {
   try {
-    document.getElementById('kidsTxt').textContent = 'Henter vejr og genererer besked...';
-    document.getElementById('adultTxt').textContent = '';
-    document.getElementById('wdescEl').textContent = 'Henter vejr...';
-
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': CFG.apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-
-    if (!res.ok) {
-      const errData = await res.json();
-      throw new Error(errData.error?.message || `HTTP ${res.status}`);
-    }
-
-    const data = await res.json();
-
-    // Find tekst-svar (kan komme efter tool_use blokke)
-    let txt = '';
-    if (data.content) {
-      for (const block of data.content) {
-        if (block.type === 'text') txt += block.text;
-      }
-    }
-
-    // Håndter stop_reason: tool_use – vi skal lave endnu et kald med tool results
-    if (data.stop_reason === 'tool_use') {
-      const toolUseBlock = data.content.find(b => b.type === 'tool_use');
-      if (toolUseBlock) {
-        const followUp = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': CFG.apiKey,
-            'anthropic-version': '2023-06-01',
-            'anthropic-dangerous-direct-browser-access': 'true'
-          },
-          body: JSON.stringify({
-            model: 'claude-sonnet-4-20250514',
-            max_tokens: 1000,
-            tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-            messages: [
-              { role: 'user', content: prompt },
-              { role: 'assistant', content: data.content },
-              { role: 'user', content: [{ type: 'tool_result', tool_use_id: toolUseBlock.id, content: 'Brug de fundne søgeresultater til at give vejrdata og generer JSON-svaret.' }] }
-            ]
-          })
-        });
-        const followData = await followUp.json();
-        txt = '';
-        if (followData.content) {
-          for (const block of followData.content) {
-            if (block.type === 'text') txt += block.text;
-          }
-        }
-      }
-    }
-
-    let parsed;
-    try {
-      const clean = txt.replace(/```json|```/g, '').trim();
-      const jsonMatch = clean.match(/\{[\s\S]*\}/);
-      parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
-    } catch(e) {
-      parsed = null;
-    }
-
-    if (parsed) {
-      document.getElementById('wtempEl').textContent = `${parsed.temp}°`;
-      document.getElementById('wdescEl').textContent = parsed.desc || '–';
-      document.getElementById('wlocEl').textContent = CFG.city;
-      document.getElementById('wextrasEl').textContent =
-        [parsed.wind ? `Vind ${parsed.wind} m/s` : '', parsed.humidity ? `Fugt ${parsed.humidity}%` : ''].filter(Boolean).join(' · ');
-      document.getElementById('kidsTxt').textContent = parsed.kids || '–';
-      document.getElementById('adultTxt').textContent = parsed.adults || '';
-      updateStars(parsed.desc || '');
-    } else {
-      document.getElementById('wdescEl').textContent = 'Kunne ikke hente vejr';
-      document.getElementById('kidsTxt').textContent = 'Fejl ved hentning af data. Tjek din API-nøgle og prøv igen.';
-    }
-
+    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${CFG.lat}&longitude=${CFG.lon}&current=temperature_2m,weathercode,windspeed_10m,relativehumidity_2m,apparent_temperature,precipitation&timezone=Europe/Copenhagen&wind_speed_unit=ms`);
+    if (!r.ok) throw new Error('HTTP '+r.status);
+    const d = await r.json(); const c = d.current;
+    const temp=Math.round(c.temperature_2m), feels=Math.round(c.apparent_temperature);
+    const wind=Math.round(c.windspeed_10m), hum=Math.round(c.relativehumidity_2m);
+    const code=c.weathercode, precip=c.precipitation||0;
+    const [desc,icon] = WMO[code]||['Ukendt','🌡'];
+    document.getElementById('wtempEl').textContent = temp+'°';
+    document.getElementById('wdescEl').textContent = desc;
+    document.getElementById('wlocEl').textContent = 'Open-Meteo · '+CFG.city;
+    document.getElementById('wextrasEl').textContent = `Føles som ${feels}° · Vind ${wind} m/s · Fugt ${hum}%`;
+    document.getElementById('weatherIcon').textContent = icon;
+    drawStars(code);
+    return {temp,feels,wind,hum,precip,desc,code};
   } catch(e) {
-    console.error('Fejl:', e);
-    document.getElementById('wdescEl').textContent = 'Fejl';
-    document.getElementById('kidsTxt').textContent = `Fejl: ${e.message}. Tjek din API-nøgle.`;
+    document.getElementById('wdescEl').textContent = 'Vejr utilgængeligt: '+e.message;
+    return null;
   }
 }
 
-function updateStars(desc) {
-  const canvas = document.getElementById('stars');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  const isRain = desc && (desc.toLowerCase().includes('regn') || desc.toLowerCase().includes('byger') || desc.toLowerCase().includes('sne') || desc.toLowerCase().includes('sky'));
-  const color = isRain ? '#8899cc' : '#ffd080';
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (let i = 0; i < 220; i++) {
-    ctx.beginPath();
-    ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 1.4, 0, Math.PI * 2);
-    ctx.fillStyle = color;
-    ctx.globalAlpha = Math.random() * .55 + .08;
-    ctx.fill();
+function drawStars(code) {
+  const cv = document.getElementById('stars'), ctx = cv.getContext('2d');
+  cv.width=window.innerWidth; cv.height=window.innerHeight;
+  const col = code>=51 ? '#8899cc' : code<=1 ? '#ffd080' : '#aabbdd';
+  for (let i=0;i<220;i++) {
+    ctx.beginPath(); ctx.arc(Math.random()*cv.width,Math.random()*cv.height,Math.random()*1.4,0,Math.PI*2);
+    ctx.fillStyle=col; ctx.globalAlpha=Math.random()*.55+.08; ctx.fill();
   }
-  ctx.globalAlpha = 1;
+  ctx.globalAlpha=1;
 }
 
-function setStatus(type, txt) {
-  document.getElementById('sdot').className = 'sdot' + (type === 'load' ? ' spin' : '');
-  document.getElementById('updatedEl').textContent = txt;
-}
-
-window.addEventListener('load', () => {
+async function genMessage(w) {
+  const n=new Date(), day=DAYS[n.getDay()], mon=MONTHS[n.getMonth()];
+  const rain = w.precip>0||(w.code>=51&&w.code<=99);
+  const prompt = `Du er en varm stemme på et familieskærm for ${CFG.family}. I dag: ${day}, ${n.getDate()}. ${mon}. Vejr i ${CFG.city}: ${w.temp}°C (føles ${w.feels}°C), ${w.desc}, vind ${w.wind} m/s.\n\nSkriv:\n1. BØRNEBESKED (2-3 muntre sætninger): hvad skal de have på?${w.temp>18&&w.code<=2?' Nævn solcreme.':''}${rain?' Nævn regnjakke.':''}${w.feels<10?' Husk varm jakke.':''}\n2. VOKSENBESKED (1-2 sætninger): poetisk påmindelse om at nyde livet og nuet, relevant for ${day} og ${mon}.\n\nKUN JSON: {"kids":"...","adults":"..."}`;
   try {
-    const saved = localStorage.getItem('fdCFG3');
-    if (saved) {
-      CFG = JSON.parse(saved);
-      document.getElementById('setupEl').style.display = 'none';
-      document.getElementById('dashEl').style.display = 'flex';
-      document.getElementById('statusbar').style.display = 'flex';
-      document.getElementById('gbtn').style.display = 'flex';
-      initDash();
-    }
-  } catch(e) {}
-
-  const canvas = document.getElementById('stars');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  for (let i = 0; i < 220; i++) {
-    ctx.beginPath();
-    ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 1.4, 0, Math.PI * 2);
-    ctx.fillStyle = '#aabbdd';
-    ctx.globalAlpha = Math.random() * .5 + .08;
-    ctx.fill();
+    document.getElementById('kidsTxt').textContent = 'Genererer...';
+    document.getElementById('adultTxt').textContent = '';
+    const r = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':CFG.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,messages:[{role:'user',content:prompt}]})
+    });
+    if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e.error?.message||'HTTP '+r.status); }
+    const d=await r.json(), txt=d.content?.[0]?.text||'';
+    let p; try { const m=txt.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/); p=m?JSON.parse(m[0]):null; } catch(e){p=null;}
+    document.getElementById('kidsTxt').textContent = p?.kids||txt||'–';
+    document.getElementById('adultTxt').textContent = p?.adults||'';
+  } catch(e) {
+    document.getElementById('kidsTxt').textContent = 'Fejl: '+e.message;
+    document.getElementById('adultTxt').textContent = 'Tjek API-nøglen under indstillinger (⚙ nedenfor).';
   }
-  ctx.globalAlpha = 1;
-  window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  });
+}
+
+function setStatus(t,txt) {
+  document.getElementById('sdot').className='sdot'+(t==='load'?' spin':'');
+  document.getElementById('updatedEl').textContent=txt;
+}
+
+window.addEventListener('load',()=>{
+  try { const s=localStorage.getItem('fdCFG4'); if(s){CFG=JSON.parse(s);document.getElementById('setupEl').style.display='none';document.getElementById('dashEl').style.display='flex';document.getElementById('statusbar').style.display='flex';document.getElementById('gbtn').style.display='flex';initDash();} } catch(e){}
+  drawStars(2);
+  window.addEventListener('resize',()=>drawStars(2));
 });
 </script>
 </body>
