@@ -22,7 +22,8 @@
   .hint { font-size: .72rem; color: rgba(232,228,216,.3); margin-top: -.8rem; margin-bottom: 1.2rem; }
   .btn { width: 100%; padding: .95rem; background: linear-gradient(135deg, #c8902a, #e8b84b); border: none; border-radius: 12px; color: #0a0f1e; font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500; cursor: pointer; margin-top: .5rem; transition: opacity .2s; }
   .btn:hover { opacity: .88; }
-  .err { font-size: .8rem; color: rgba(255,140,140,.7); margin-top: .6rem; min-height: 1.2rem; line-height: 1.5; }
+  .err { font-size: .8rem; color: rgba(255,140,140,.7); margin-top: .6rem; min-height: 1.2rem; }
+
   .dash { display: none; flex-direction: column; flex: 1; padding: 1.8rem; gap: 1.2rem; max-width: 1100px; margin: 0 auto; width: 100%; }
   .top-row { display: flex; justify-content: space-between; align-items: flex-start; }
   .clock { font-family: 'Playfair Display', serif; font-size: 5rem; font-weight: 400; line-height: 1; letter-spacing: -3px; color: #f0ead8; }
@@ -32,19 +33,33 @@
   .wdesc { font-size: .88rem; color: rgba(232,228,216,.5); margin-top: .2rem; }
   .wloc { font-size: .72rem; color: rgba(232,228,216,.3); margin-top: .1rem; }
   .wextras { font-size: .75rem; color: rgba(232,228,216,.35); margin-top: .2rem; }
+
   .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-  .imgbox { border-radius: 18px; overflow: hidden; aspect-ratio: 4/3; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center; }
-  .imgph { text-align: center; padding: 2rem; color: rgba(232,228,216,.25); font-size: .85rem; line-height: 1.8; }
-  .ico { font-size: 5rem; display: block; margin-bottom: .5rem; }
+
+  /* Billedboks */
+  .imgbox { border-radius: 18px; overflow: hidden; aspect-ratio: 4/3; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); position: relative; }
+  .imgbox img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity .5s; }
+  .img-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .8rem; }
+  .img-spinner { width: 32px; height: 32px; border: 2px solid rgba(232,228,216,.1); border-top-color: #e8b84b; border-radius: 50%; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .img-loading-txt { font-size: .75rem; color: rgba(232,228,216,.3); }
+
+  /* Beskedboks – nu kompakt til børn, fyldig til voksne */
   .msgbox { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; padding: 1.6rem; display: flex; flex-direction: column; justify-content: space-between; }
   .mlabel { font-size: .68rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: rgba(232,228,216,.3); margin-bottom: 1rem; }
-  .kids-head { font-size: .7rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: #e8b84b; margin-bottom: .5rem; opacity: .8; }
-  .kids-txt { font-size: 1rem; line-height: 1.65; color: #e8e4d8; }
-  .adult-area { border-top: 1px solid rgba(255,255,255,.08); padding-top: 1.1rem; margin-top: 1.2rem; }
-  .adult-head { font-size: .7rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: rgba(180,160,220,.65); margin-bottom: .5rem; }
-  .adult-txt { font-size: .88rem; line-height: 1.6; color: rgba(232,228,216,.65); font-style: italic; }
+
+  .kids-section { display: flex; flex-direction: column; gap: .6rem; margin-bottom: 1rem; }
+  .kids-head { font-size: .7rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: #e8b84b; opacity: .8; }
+  .kids-pills { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .pill { background: rgba(232,184,75,.12); border: 1px solid rgba(232,184,75,.25); border-radius: 20px; padding: .3rem .8rem; font-size: .85rem; color: #e8e4d8; }
+
+  .adult-area { border-top: 1px solid rgba(255,255,255,.08); padding-top: 1.2rem; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .adult-head { font-size: .7rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: rgba(180,160,220,.65); margin-bottom: .6rem; }
+  .adult-txt { font-size: 1rem; line-height: 1.7; color: rgba(232,228,216,.8); font-style: italic; }
+
   .agenda-box { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; padding: 1.4rem; }
   .noevt { font-size: .85rem; color: rgba(232,228,216,.25); text-align: center; padding: .8rem; }
+
   .statusbar { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,.06); padding: .8rem 1.8rem; }
   .sdot { width: 5px; height: 5px; border-radius: 50%; background: #4ade80; }
   .sdot.spin { background: #e8b84b; animation: pulse 1s infinite; }
@@ -63,10 +78,10 @@
 <div class="setup" id="setupEl">
   <div class="card">
     <h1>Familie Dashboard</h1>
-    <p class="sub">Vejrdata hentes automatisk fra Open-Meteo – gratis og uden nøgle. Du skal kun bruge din Anthropic API-nøgle til de daglige beskeder.</p>
+    <p class="sub">Vejr fra Open-Meteo (gratis, ingen nøgle). AI-billeder fra Pollinations.ai (gratis, ingen nøgle). Du skal kun bruge din Anthropic API-nøgle.</p>
     <label class="lbl">Anthropic API-nøgle</label>
     <input class="inp" type="password" id="apiKey" placeholder="sk-ant-api03-..." />
-    <div class="hint">Hent nøglen på console.anthropic.com under "API Keys"</div>
+    <div class="hint">Hent på console.anthropic.com under "API Keys"</div>
     <label class="lbl">Din by</label>
     <input class="inp" type="text" id="cityIn" value="København" />
     <label class="lbl">Familiens navne</label>
@@ -89,22 +104,33 @@
       <div class="wextras" id="wextrasEl"></div>
     </div>
   </div>
+
   <div class="hero">
-    <div class="imgbox">
-      <div class="imgph"><span class="ico" id="weatherIcon">🌤</span>Open-Meteo vejrdata</div>
+    <div class="imgbox" id="imgbox">
+      <div class="img-loading" id="imgLoading">
+        <div class="img-spinner"></div>
+        <div class="img-loading-txt">Genererer vejrbillede...</div>
+      </div>
+      <img id="weatherImg" style="opacity:0;position:absolute;inset:0;" alt="Vejrbillede" />
     </div>
+
     <div class="msgbox">
       <div>
         <div class="mlabel">Dagens besked</div>
-        <div class="kids-head">Til børnene 🧒</div>
-        <p class="kids-txt" id="kidsTxt">Henter...</p>
+        <div class="kids-section">
+          <div class="kids-head">Til børnene 🧒</div>
+          <div class="kids-pills" id="kidsPills">
+            <div class="pill">Henter vejr...</div>
+          </div>
+        </div>
       </div>
       <div class="adult-area">
         <div class="adult-head">Til de voksne ✨</div>
-        <p class="adult-txt" id="adultTxt"></p>
+        <p class="adult-txt" id="adultTxt">Henter påmindelse...</p>
       </div>
     </div>
   </div>
+
   <div class="agenda-box">
     <div class="mlabel">Dagens program</div>
     <div class="noevt">Google Calendar kan tilføjes i næste version</div>
@@ -112,7 +138,7 @@
 </div>
 
 <div class="statusbar" id="statusbar" style="display:none">
-  <div class="stext"><div class="sdot" id="sdot"></div><span></span></div>
+  <div class="stext"><div class="sdot" id="sdot"></div></div>
   <div class="stext" id="updatedEl"></div>
   <button class="rbtn" onclick="refreshAll()">↻ Opdater</button>
 </div>
@@ -124,11 +150,27 @@ let CFG = {};
 const DAYS = ['søndag','mandag','tirsdag','onsdag','torsdag','fredag','lørdag'];
 const MONTHS = ['januar','februar','marts','april','maj','juni','juli','august','september','oktober','november','december'];
 const WMO = {
-  0:['Klar himmel','☀️'],1:['Overvejende klart','🌤'],2:['Delvist skyet','⛅'],3:['Overskyet','☁️'],
-  45:['Tåge','🌫'],48:['Rimtåge','🌫'],51:['Let støvregn','🌦'],53:['Støvregn','🌦'],55:['Kraftig støvregn','🌧'],
-  61:['Let regn','🌧'],63:['Regn','🌧'],65:['Kraftig regn','🌧'],71:['Let sne','🌨'],73:['Snefald','❄️'],
-  75:['Kraftigt snefald','❄️'],80:['Lette byger','🌦'],81:['Byger','🌧'],82:['Kraftige byger','⛈'],
-  85:['Snebyger','🌨'],95:['Tordenvejr','⛈'],96:['Tordenvejr m. hagl','⛈'],99:['Kraftigt tordenvejr','⛈']
+  0:['Klar himmel','☀️','clear sunny sky, bright sunshine'],
+  1:['Overvejende klart','🌤','mostly clear sky with few clouds, sunshine'],
+  2:['Delvist skyet','⛅','partly cloudy sky, some sunshine'],
+  3:['Overskyet','☁️','overcast grey cloudy sky'],
+  45:['Tåge','🌫','foggy misty morning'],
+  48:['Rimtåge','🌫','frosty foggy morning'],
+  51:['Let støvregn','🌦','light drizzle rain'],
+  53:['Støvregn','🌦','drizzle rain'],
+  55:['Kraftig støvregn','🌧','heavy drizzle rain'],
+  61:['Let regn','🌧','light rain drops falling'],
+  63:['Regn','🌧','rainy day with puddles'],
+  65:['Kraftig regn','🌧','heavy pouring rain storm'],
+  71:['Let sne','🌨','light snowfall gentle'],
+  73:['Snefald','❄️','snowfall winter wonderland'],
+  75:['Kraftigt snefald','❄️','heavy blizzard snowstorm'],
+  80:['Lette byger','🌦','passing rain shower'],
+  81:['Byger','🌧','rain showers cloudy'],
+  82:['Kraftige byger','⛈','heavy rain showers storm'],
+  85:['Snebyger','🌨','snow showers winter'],
+  95:['Tordenvejr','⛈','thunderstorm lightning dramatic'],
+  99:['Kraftigt tordenvejr','⛈','severe thunderstorm with lightning']
 };
 const COORDS = {
   'københavn':[55.676,12.568],'kobenhavn':[55.676,12.568],'copenhagen':[55.676,12.568],
@@ -140,6 +182,7 @@ const COORDS = {
   'frederiksberg':[55.678,12.524],'gentofte':[55.751,12.535],'lyngby':[55.771,12.503],
   'birkerød':[55.842,12.428],'birkerod':[55.842,12.428],'allerød':[55.868,12.351],
   'holte':[55.808,12.470],'vedbæk':[55.848,12.564],'vedbaek':[55.848,12.564],
+  'charlottenlund':[55.757,12.587],'taastrup':[55.652,12.300],'greve':[55.590,12.299],
 };
 
 function getCoords(city) {
@@ -156,7 +199,7 @@ function startDash() {
   if (!apiKey) { document.getElementById('setupErr').textContent = 'Udfyld din Anthropic API-nøgle.'; return; }
   const coords = getCoords(city);
   CFG = { apiKey, city, family, lat: coords[0], lon: coords[1] };
-  try { localStorage.setItem('fdCFG4', JSON.stringify(CFG)); } catch(e) {}
+  try { localStorage.setItem('fdCFG5', JSON.stringify(CFG)); } catch(e) {}
   document.getElementById('setupEl').style.display = 'none';
   document.getElementById('dashEl').style.display = 'flex';
   document.getElementById('statusbar').style.display = 'flex';
@@ -194,7 +237,10 @@ function scheduleMorning() {
 async function refreshAll() {
   setStatus('load','Opdaterer...');
   const w = await fetchWeather();
-  if (w) await genMessage(w);
+  if (w) {
+    generateImage(w);
+    await genMessage(w);
+  }
   setStatus('ok', `Opdateret kl. ${new Date().toLocaleTimeString('da-DK',{hour:'2-digit',minute:'2-digit'})}`);
 }
 
@@ -206,18 +252,56 @@ async function fetchWeather() {
     const temp=Math.round(c.temperature_2m), feels=Math.round(c.apparent_temperature);
     const wind=Math.round(c.windspeed_10m), hum=Math.round(c.relativehumidity_2m);
     const code=c.weathercode, precip=c.precipitation||0;
-    const [desc,icon] = WMO[code]||['Ukendt','🌡'];
+    const info = WMO[code] || ['Ukendt','🌡','weather'];
+    const desc=info[0], icon=info[1], imgDesc=info[2];
     document.getElementById('wtempEl').textContent = temp+'°';
     document.getElementById('wdescEl').textContent = desc;
     document.getElementById('wlocEl').textContent = 'Open-Meteo · '+CFG.city;
     document.getElementById('wextrasEl').textContent = `Føles som ${feels}° · Vind ${wind} m/s · Fugt ${hum}%`;
-    document.getElementById('weatherIcon').textContent = icon;
     drawStars(code);
-    return {temp,feels,wind,hum,precip,desc,code};
+    return {temp,feels,wind,hum,precip,desc,icon,imgDesc,code};
   } catch(e) {
-    document.getElementById('wdescEl').textContent = 'Vejr utilgængeligt: '+e.message;
+    document.getElementById('wdescEl').textContent = 'Vejr utilgængeligt';
     return null;
   }
+}
+
+function generateImage(w) {
+  const img = document.getElementById('weatherImg');
+  const loading = document.getElementById('imgLoading');
+
+  img.style.opacity = '0';
+  loading.style.display = 'flex';
+
+  // Byg en sjov børnevenlig prompt baseret på vejret
+  const season = getSeason();
+  const prompt = encodeURIComponent(
+    `cute cartoon illustration, ${w.imgDesc}, ${season} in Denmark, happy children getting dressed for school, ` +
+    `cheerful colorful kids art style, warm and cozy family morning, no text, vibrant colors, flat illustration style`
+  );
+
+  const seed = new Date().toDateString().split('').reduce((a,c)=>a+c.charCodeAt(0),0);
+  const url = `https://image.pollinations.ai/prompt/${prompt}?width=640&height=480&nologo=true&seed=${seed}&model=flux`;
+
+  const tempImg = new Image();
+  tempImg.onload = () => {
+    img.src = url;
+    img.style.position = 'relative';
+    img.style.opacity = '1';
+    loading.style.display = 'none';
+  };
+  tempImg.onerror = () => {
+    loading.innerHTML = `<div style="font-size:4rem">${w.icon}</div><div style="font-size:.75rem;color:rgba(232,228,216,.3);margin-top:.5rem">${w.desc}</div>`;
+  };
+  tempImg.src = url;
+}
+
+function getSeason() {
+  const m = new Date().getMonth();
+  if (m >= 2 && m <= 4) return 'spring';
+  if (m >= 5 && m <= 7) return 'summer';
+  if (m >= 8 && m <= 10) return 'autumn';
+  return 'winter';
 }
 
 function drawStars(code) {
@@ -234,23 +318,38 @@ function drawStars(code) {
 async function genMessage(w) {
   const n=new Date(), day=DAYS[n.getDay()], mon=MONTHS[n.getMonth()];
   const rain = w.precip>0||(w.code>=51&&w.code<=99);
-  const prompt = `Du er en varm stemme på et familieskærm for ${CFG.family}. I dag: ${day}, ${n.getDate()}. ${mon}. Vejr i ${CFG.city}: ${w.temp}°C (føles ${w.feels}°C), ${w.desc}, vind ${w.wind} m/s.\n\nSkriv:\n1. BØRNEBESKED (2-3 muntre sætninger): hvad skal de have på?${w.temp>18&&w.code<=2?' Nævn solcreme.':''}${rain?' Nævn regnjakke.':''}${w.feels<10?' Husk varm jakke.':''}\n2. VOKSENBESKED (1-2 sætninger): poetisk påmindelse om at nyde livet og nuet, relevant for ${day} og ${mon}.\n\nKUN JSON: {"kids":"...","adults":"..."}`;
+
+  // Byggepiller til børn – max 4-5 korte pills
+  const prompt = `Du er på et familieskærm-dashboard for ${CFG.family}. I dag: ${day}, ${w.temp}°C (føles ${w.feels}°C), ${w.desc}${rain?', regn':''}.
+
+Returner JSON med:
+1. "pills": array med 3-5 MEGET korte beklædnings-tips til børn som ikoner + tekst. Fx: ["☀️ Solbriller","👕 T-shirt","🧴 Solcreme"]. Max 2-3 ord pr. pill. Basér på vejret.${w.temp>18&&w.code<=2?' Inkluder solcreme.':''}${rain?' Inkluder regnjakke.':''}${w.feels<10?' Inkluder varm jakke.':''}
+2. "adults": 1-2 sætninger. En varm, poetisk påmindelse om at nyde livet og nuet – relevant for ${day} og ${mon}.
+
+KUN JSON: {"pills":["...","..."],"adults":"..."}`;
+
   try {
-    document.getElementById('kidsTxt').textContent = 'Genererer...';
+    document.getElementById('kidsPills').innerHTML = '<div class="pill">Genererer...</div>';
     document.getElementById('adultTxt').textContent = '';
+
     const r = await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':CFG.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,messages:[{role:'user',content:prompt}]})
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:300,messages:[{role:'user',content:prompt}]})
     });
     if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e.error?.message||'HTTP '+r.status); }
     const d=await r.json(), txt=d.content?.[0]?.text||'';
     let p; try { const m=txt.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/); p=m?JSON.parse(m[0]):null; } catch(e){p=null;}
-    document.getElementById('kidsTxt').textContent = p?.kids||txt||'–';
-    document.getElementById('adultTxt').textContent = p?.adults||'';
+
+    if (p?.pills && Array.isArray(p.pills)) {
+      document.getElementById('kidsPills').innerHTML = p.pills.map(t=>`<div class="pill">${t}</div>`).join('');
+    } else {
+      document.getElementById('kidsPills').innerHTML = `<div class="pill">${w.icon} ${w.desc}</div>`;
+    }
+    document.getElementById('adultTxt').textContent = p?.adults || '';
   } catch(e) {
-    document.getElementById('kidsTxt').textContent = 'Fejl: '+e.message;
-    document.getElementById('adultTxt').textContent = 'Tjek API-nøglen under indstillinger (⚙ nedenfor).';
+    document.getElementById('kidsPills').innerHTML = `<div class="pill">Fejl – tjek API-nøgle (⚙)</div>`;
+    document.getElementById('adultTxt').textContent = e.message;
   }
 }
 
@@ -260,7 +359,7 @@ function setStatus(t,txt) {
 }
 
 window.addEventListener('load',()=>{
-  try { const s=localStorage.getItem('fdCFG4'); if(s){CFG=JSON.parse(s);document.getElementById('setupEl').style.display='none';document.getElementById('dashEl').style.display='flex';document.getElementById('statusbar').style.display='flex';document.getElementById('gbtn').style.display='flex';initDash();} } catch(e){}
+  try { const s=localStorage.getItem('fdCFG5'); if(s){CFG=JSON.parse(s);document.getElementById('setupEl').style.display='none';document.getElementById('dashEl').style.display='flex';document.getElementById('statusbar').style.display='flex';document.getElementById('gbtn').style.display='flex';initDash();} } catch(e){}
   drawStars(2);
   window.addEventListener('resize',()=>drawStars(2));
 });
