@@ -4,13 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Familie Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'DM Sans', sans-serif; background: #0a0f1e; color: #e8e4d8; min-height: 100vh; }
   .bg { position: fixed; inset: 0; z-index: 0; background: linear-gradient(160deg, #0a0f1e 0%, #0d1832 40%, #0a1628 100%); }
   .bg canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .55; }
   .page { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+  /* SETUP */
   .setup { display: flex; align-items: center; justify-content: center; flex: 1; padding: 2rem; }
   .card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 24px; padding: 2.5rem; max-width: 520px; width: 100%; }
   .card h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: #f0ead8; margin-bottom: .4rem; }
@@ -24,88 +26,171 @@
   .btn:hover { opacity: .88; }
   .err { font-size: .8rem; color: rgba(255,140,140,.7); margin-top: .6rem; min-height: 1.2rem; }
 
-  .dash { display: none; flex-direction: column; flex: 1; padding: 1.8rem; gap: 1.2rem; max-width: 1100px; margin: 0 auto; width: 100%; }
-  .top-row { display: flex; justify-content: space-between; align-items: flex-start; }
-  .clock { font-family: 'Playfair Display', serif; font-size: 5rem; font-weight: 400; line-height: 1; letter-spacing: -3px; color: #f0ead8; }
-  .dateline { font-size: .95rem; color: rgba(232,228,216,.45); margin-top: .3rem; }
-  .wblock { text-align: right; }
-  .wtemp { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 400; color: #f0ead8; line-height: 1; }
-  .wdesc { font-size: .88rem; color: rgba(232,228,216,.5); margin-top: .2rem; }
-  .wloc { font-size: .72rem; color: rgba(232,228,216,.3); margin-top: .1rem; }
-  .wextras { font-size: .75rem; color: rgba(232,228,216,.35); margin-top: .2rem; }
+  /* DASHBOARD */
+  .dash { display: none; flex-direction: column; flex: 1; padding: 1.6rem; gap: 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
 
-  .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  /* STOR DATO OG TID ØVERST */
+  .hero-date {
+    text-align: center;
+    padding: 1.2rem 0 .8rem;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    margin-bottom: .2rem;
+  }
+  .hero-dayname {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.2rem;
+    font-weight: 600;
+    color: #f0ead8;
+    line-height: 1;
+    text-transform: capitalize;
+  }
+  .hero-datestr {
+    font-size: 1.1rem;
+    color: rgba(232,228,216,.45);
+    margin-top: .3rem;
+    letter-spacing: .02em;
+  }
+  .hero-time {
+    font-family: 'Playfair Display', serif;
+    font-size: 4.5rem;
+    font-weight: 400;
+    color: #e8b84b;
+    line-height: 1;
+    letter-spacing: -2px;
+    margin-top: .3rem;
+  }
 
-  /* Billedboks */
+  /* HILSEN */
+  .greeting-bar {
+    text-align: center;
+    padding: .4rem 0;
+  }
+  .greeting-txt {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-style: italic;
+    color: rgba(232,228,216,.7);
+  }
+
+  /* VEJR ROW */
+  .weather-row {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    align-items: center;
+  }
+  .wtemp { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 400; color: #f0ead8; line-height: 1; }
+  .winfo { display: flex; flex-direction: column; gap: .2rem; }
+  .wdesc { font-size: .9rem; color: rgba(232,228,216,.5); }
+  .wloc { font-size: .72rem; color: rgba(232,228,216,.28); }
+  .wextras { font-size: .75rem; color: rgba(232,228,216,.32); }
+
+  /* HERO GRID */
+  .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+
+  /* BILLEDBOKS */
   .imgbox { border-radius: 18px; overflow: hidden; aspect-ratio: 4/3; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); position: relative; }
-  .imgbox img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity .5s; }
+  .imgbox img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity .6s; }
   .img-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .8rem; }
   .img-spinner { width: 32px; height: 32px; border: 2px solid rgba(232,228,216,.1); border-top-color: #e8b84b; border-radius: 50%; animation: spin 1s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .img-loading-txt { font-size: .75rem; color: rgba(232,228,216,.3); }
 
-  /* Beskedboks – nu kompakt til børn, fyldig til voksne */
-  .msgbox { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; padding: 1.6rem; display: flex; flex-direction: column; justify-content: space-between; }
-  .mlabel { font-size: .68rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: rgba(232,228,216,.3); margin-bottom: 1rem; }
+  /* BESKEDBOKS */
+  .msgbox { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; padding: 1.4rem; display: flex; flex-direction: column; gap: 1rem; }
+  .section-head { font-size: .68rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: rgba(232,228,216,.3); margin-bottom: .4rem; }
 
-  .kids-section { display: flex; flex-direction: column; gap: .6rem; margin-bottom: 1rem; }
-  .kids-head { font-size: .7rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: #e8b84b; opacity: .8; }
-  .kids-pills { display: flex; flex-wrap: wrap; gap: .4rem; }
-  .pill { background: rgba(232,184,75,.12); border: 1px solid rgba(232,184,75,.25); border-radius: 20px; padding: .3rem .8rem; font-size: .85rem; color: #e8e4d8; }
+  /* MOTIVATION TIL BØRN */
+  .motivation-box {
+    background: rgba(232,184,75,.08);
+    border: 1px solid rgba(232,184,75,.2);
+    border-radius: 12px;
+    padding: .8rem 1rem;
+  }
+  .motivation-txt {
+    font-size: .95rem;
+    color: #f0ead8;
+    line-height: 1.5;
+    font-style: italic;
+  }
 
-  .adult-area { border-top: 1px solid rgba(255,255,255,.08); padding-top: 1.2rem; flex: 1; display: flex; flex-direction: column; justify-content: center; }
-  .adult-head { font-size: .7rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: rgba(180,160,220,.65); margin-bottom: .6rem; }
-  .adult-txt { font-size: 1rem; line-height: 1.7; color: rgba(232,228,216,.8); font-style: italic; }
+  /* PILLS */
+  .kids-pills { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .3rem; }
+  .pill { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); border-radius: 20px; padding: .3rem .8rem; font-size: .85rem; color: #e8e4d8; }
 
-  .agenda-box { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; padding: 1.4rem; }
-  .noevt { font-size: .85rem; color: rgba(232,228,216,.25); text-align: center; padding: .8rem; }
+  /* VOKSEN */
+  .adult-box {
+    border-top: 1px solid rgba(255,255,255,.08);
+    padding-top: 1rem;
+  }
+  .adult-txt { font-size: .95rem; line-height: 1.65; color: rgba(232,228,216,.75); font-style: italic; }
 
-  .statusbar { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,.06); padding: .8rem 1.8rem; }
+  /* STATUS */
+  .statusbar { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,.06); padding: .7rem 1.6rem; }
   .sdot { width: 5px; height: 5px; border-radius: 50%; background: #4ade80; }
   .sdot.spin { background: #e8b84b; animation: pulse 1s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.25} }
-  .stext { font-size: .73rem; color: rgba(232,228,216,.3); display: flex; align-items: center; gap: .4rem; }
-  .rbtn { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 8px; padding: .35rem .75rem; color: rgba(232,228,216,.45); font-size: .73rem; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .2s; }
+  .stext { font-size: .72rem; color: rgba(232,228,216,.28); display: flex; align-items: center; gap: .4rem; }
+  .rbtn { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 8px; padding: .32rem .7rem; color: rgba(232,228,216,.4); font-size: .72rem; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .2s; }
   .rbtn:hover { background: rgba(255,255,255,.1); color: rgba(232,228,216,.8); }
   .gbtn { position: fixed; bottom: 1.2rem; right: 1.2rem; z-index: 10; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 50%; width: 38px; height: 38px; display: none; align-items: center; justify-content: center; cursor: pointer; font-size: .95rem; color: rgba(232,228,216,.35); }
-  @media (max-width: 700px) { .hero { grid-template-columns: 1fr; } .clock { font-size: 3.5rem; } .wtemp { font-size: 2.5rem; } .dash { padding: 1rem; } }
+
+  @media (max-width: 700px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-dayname { font-size: 2.2rem; }
+    .hero-time { font-size: 3rem; }
+    .dash { padding: 1rem; }
+  }
 </style>
 </head>
 <body>
 <div class="bg"><canvas id="stars"></canvas></div>
 <div class="page">
 
+<!-- SETUP -->
 <div class="setup" id="setupEl">
   <div class="card">
     <h1>Familie Dashboard</h1>
-    <p class="sub">Vejr fra Open-Meteo (gratis, ingen nøgle). AI-billeder fra Pollinations.ai (gratis, ingen nøgle). Du skal kun bruge din Anthropic API-nøgle.</p>
+    <p class="sub">Vejr fra Open-Meteo (gratis). Billeder fra Pollinations.ai (gratis). Kun Anthropic API-nøgle er nødvendig.</p>
     <label class="lbl">Anthropic API-nøgle</label>
     <input class="inp" type="password" id="apiKey" placeholder="sk-ant-api03-..." />
     <div class="hint">Hent på console.anthropic.com under "API Keys"</div>
     <label class="lbl">Din by</label>
     <input class="inp" type="text" id="cityIn" value="København" />
-    <label class="lbl">Familiens navne</label>
-    <input class="inp" type="text" id="familyIn" placeholder="fx Jonas, kone og 3 børn" />
+    <label class="lbl">Familiens navne (til hilsen)</label>
+    <input class="inp" type="text" id="familyIn" placeholder="fx Ella, Nora og Liva" value="Ella, Nora og Liva" />
     <button class="btn" onclick="startDash()">Start dashboard →</button>
     <p class="err" id="setupErr"></p>
   </div>
 </div>
 
+<!-- DASHBOARD -->
 <div class="dash" id="dashEl">
-  <div class="top-row">
-    <div>
-      <div class="clock" id="clockEl">--:--</div>
-      <div class="dateline" id="dateEl"></div>
-    </div>
-    <div class="wblock">
-      <div class="wtemp" id="wtempEl">–°</div>
+
+  <!-- STOR DATO + TID -->
+  <div class="hero-date">
+    <div class="hero-dayname" id="heroDayname">Mandag</div>
+    <div class="hero-datestr" id="heroDatestr">den 23. april 2026</div>
+    <div class="hero-time" id="heroTime">06:30</div>
+  </div>
+
+  <!-- HILSEN -->
+  <div class="greeting-bar">
+    <div class="greeting-txt" id="greetingTxt">God morgen, Ella, Nora og Liva!</div>
+  </div>
+
+  <!-- VEJR -->
+  <div class="weather-row">
+    <div class="wtemp" id="wtempEl">–°</div>
+    <div class="winfo">
       <div class="wdesc" id="wdescEl">Henter vejr...</div>
-      <div class="wloc" id="wlocEl"></div>
       <div class="wextras" id="wextrasEl"></div>
+      <div class="wloc" id="wlocEl"></div>
     </div>
   </div>
 
-  <div class="hero">
+  <!-- BILLEDE + BESKEDER -->
+  <div class="hero-grid">
     <div class="imgbox" id="imgbox">
       <div class="img-loading" id="imgLoading">
         <div class="img-spinner"></div>
@@ -115,26 +200,30 @@
     </div>
 
     <div class="msgbox">
+
+      <!-- MOTIVATION TIL BØRN -->
       <div>
-        <div class="mlabel">Dagens besked</div>
-        <div class="kids-section">
-          <div class="kids-head">Til børnene 🧒</div>
-          <div class="kids-pills" id="kidsPills">
-            <div class="pill">Henter vejr...</div>
-          </div>
+        <div class="section-head">Dagens tanke ⭐</div>
+        <div class="motivation-box">
+          <div class="motivation-txt" id="motivationTxt">Henter...</div>
         </div>
       </div>
-      <div class="adult-area">
-        <div class="adult-head">Til de voksne ✨</div>
-        <p class="adult-txt" id="adultTxt">Henter påmindelse...</p>
+
+      <!-- BEKLÆDNING PILLS -->
+      <div>
+        <div class="section-head">Husk i dag 🎒</div>
+        <div class="kids-pills" id="kidsPills"><div class="pill">Henter vejr...</div></div>
       </div>
+
+      <!-- VOKSEN PÅMINDELSE -->
+      <div class="adult-box">
+        <div class="section-head">Til de voksne ✨</div>
+        <p class="adult-txt" id="adultTxt">Henter...</p>
+      </div>
+
     </div>
   </div>
 
-  <div class="agenda-box">
-    <div class="mlabel">Dagens program</div>
-    <div class="noevt">Google Calendar kan tilføjes i næste version</div>
-  </div>
 </div>
 
 <div class="statusbar" id="statusbar" style="display:none">
@@ -149,29 +238,31 @@
 let CFG = {};
 const DAYS = ['søndag','mandag','tirsdag','onsdag','torsdag','fredag','lørdag'];
 const MONTHS = ['januar','februar','marts','april','maj','juni','juli','august','september','oktober','november','december'];
+
 const WMO = {
-  0:['Klar himmel','☀️','clear sunny sky, bright sunshine'],
-  1:['Overvejende klart','🌤','mostly clear sky with few clouds, sunshine'],
-  2:['Delvist skyet','⛅','partly cloudy sky, some sunshine'],
-  3:['Overskyet','☁️','overcast grey cloudy sky'],
-  45:['Tåge','🌫','foggy misty morning'],
+  0:['Klar himmel','☀️','bright clear sunny sky, happy smiling sun'],
+  1:['Overvejende klart','🌤','mostly sunny sky with a few clouds'],
+  2:['Delvist skyet','⛅','partly cloudy sky with sunshine peeking through'],
+  3:['Overskyet','☁️','overcast cloudy grey sky'],
+  45:['Tåge','🌫','foggy misty morning, soft light'],
   48:['Rimtåge','🌫','frosty foggy morning'],
-  51:['Let støvregn','🌦','light drizzle rain'],
-  53:['Støvregn','🌦','drizzle rain'],
+  51:['Let støvregn','🌦','light drizzle rain, small raindrops'],
+  53:['Støvregn','🌦','drizzle rainy day'],
   55:['Kraftig støvregn','🌧','heavy drizzle rain'],
-  61:['Let regn','🌧','light rain drops falling'],
-  63:['Regn','🌧','rainy day with puddles'],
-  65:['Kraftig regn','🌧','heavy pouring rain storm'],
-  71:['Let sne','🌨','light snowfall gentle'],
-  73:['Snefald','❄️','snowfall winter wonderland'],
-  75:['Kraftigt snefald','❄️','heavy blizzard snowstorm'],
-  80:['Lette byger','🌦','passing rain shower'],
-  81:['Byger','🌧','rain showers cloudy'],
-  82:['Kraftige byger','⛈','heavy rain showers storm'],
-  85:['Snebyger','🌨','snow showers winter'],
-  95:['Tordenvejr','⛈','thunderstorm lightning dramatic'],
-  99:['Kraftigt tordenvejr','⛈','severe thunderstorm with lightning']
+  61:['Let regn','🌧','light rain, rain drops falling'],
+  63:['Regn','🌧','rainy day with puddles and raindrops'],
+  65:['Kraftig regn','🌧','heavy pouring rain'],
+  71:['Let sne','🌨','gentle snowfall, soft white snowflakes'],
+  73:['Snefald','❄️','snowfall, winter wonderland, snowflakes'],
+  75:['Kraftigt snefald','❄️','heavy snowstorm blizzard'],
+  80:['Lette byger','🌦','passing rain shower, clearing sky'],
+  81:['Byger','🌧','rain showers'],
+  82:['Kraftige byger','⛈','heavy rain showers, dramatic sky'],
+  85:['Snebyger','🌨','snow showers, snowflakes falling'],
+  95:['Tordenvejr','⛈','thunderstorm with lightning bolts'],
+  99:['Kraftigt tordenvejr','⛈','severe thunderstorm heavy lightning']
 };
+
 const COORDS = {
   'københavn':[55.676,12.568],'kobenhavn':[55.676,12.568],'copenhagen':[55.676,12.568],
   'aarhus':[56.162,10.203],'arhus':[56.162,10.203],'odense':[55.396,10.388],
@@ -192,14 +283,39 @@ function getCoords(city) {
   return [55.676,12.568];
 }
 
+function getGreeting(names) {
+  const h = new Date().getHours();
+  let prefix;
+  if (h >= 5 && h < 10) prefix = 'God morgen';
+  else if (h >= 10 && h < 12) prefix = 'God formiddag';
+  else if (h >= 12 && h < 14) prefix = 'God middag';
+  else if (h >= 14 && h < 18) prefix = 'God eftermiddag';
+  else if (h >= 18 && h < 22) prefix = 'God aften';
+  else prefix = 'God nat';
+  return `${prefix}, ${names}!`;
+}
+
+function updateClock() {
+  const n = new Date();
+  const h = String(n.getHours()).padStart(2,'0');
+  const m = String(n.getMinutes()).padStart(2,'0');
+  const dayName = DAYS[n.getDay()];
+  const dateStr = `den ${n.getDate()}. ${MONTHS[n.getMonth()]} ${n.getFullYear()}`;
+
+  document.getElementById('heroDayname').textContent = dayName.charAt(0).toUpperCase() + dayName.slice(1);
+  document.getElementById('heroDatestr').textContent = dateStr;
+  document.getElementById('heroTime').textContent = `${h}:${m}`;
+  document.getElementById('greetingTxt').textContent = getGreeting(CFG.family || 'alle');
+}
+
 function startDash() {
   const apiKey = document.getElementById('apiKey').value.trim();
   const city = document.getElementById('cityIn').value.trim() || 'København';
-  const family = document.getElementById('familyIn').value.trim() || 'familien';
+  const family = document.getElementById('familyIn').value.trim() || 'Ella, Nora og Liva';
   if (!apiKey) { document.getElementById('setupErr').textContent = 'Udfyld din Anthropic API-nøgle.'; return; }
   const coords = getCoords(city);
   CFG = { apiKey, city, family, lat: coords[0], lon: coords[1] };
-  try { localStorage.setItem('fdCFG5', JSON.stringify(CFG)); } catch(e) {}
+  try { localStorage.setItem('fdCFG6', JSON.stringify(CFG)); } catch(e) {}
   document.getElementById('setupEl').style.display = 'none';
   document.getElementById('dashEl').style.display = 'flex';
   document.getElementById('statusbar').style.display = 'flex';
@@ -218,14 +334,10 @@ function showSetup() {
 }
 
 function initDash() {
-  updateClock(); setInterval(updateClock, 1000);
-  refreshAll(); scheduleMorning();
-}
-
-function updateClock() {
-  const n = new Date();
-  document.getElementById('clockEl').textContent = String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
-  document.getElementById('dateEl').textContent = `${DAYS[n.getDay()]}, ${n.getDate()}. ${MONTHS[n.getMonth()]} ${n.getFullYear()}`;
+  updateClock();
+  setInterval(updateClock, 1000);
+  refreshAll();
+  scheduleMorning();
 }
 
 function scheduleMorning() {
@@ -253,9 +365,9 @@ async function fetchWeather() {
     const wind=Math.round(c.windspeed_10m), hum=Math.round(c.relativehumidity_2m);
     const code=c.weathercode, precip=c.precipitation||0;
     const info = WMO[code] || ['Ukendt','🌡','weather'];
-    const desc=info[0], icon=info[1], imgDesc=info[2];
+    const [desc, icon, imgDesc] = info;
     document.getElementById('wtempEl').textContent = temp+'°';
-    document.getElementById('wdescEl').textContent = desc;
+    document.getElementById('wdescEl').textContent = desc+' '+icon;
     document.getElementById('wlocEl').textContent = 'Open-Meteo · '+CFG.city;
     document.getElementById('wextrasEl').textContent = `Føles som ${feels}° · Vind ${wind} m/s · Fugt ${hum}%`;
     drawStars(code);
@@ -266,42 +378,55 @@ async function fetchWeather() {
   }
 }
 
+function getSeason() {
+  const m = new Date().getMonth();
+  if (m>=2&&m<=4) return 'spring';
+  if (m>=5&&m<=7) return 'summer';
+  if (m>=8&&m<=10) return 'autumn';
+  return 'winter';
+}
+
+// Skifter mellem dyr og mennesker baseret på datoen
+function getImageSubject() {
+  const day = new Date().getDate();
+  const subjects = [
+    'happy smiling children getting dressed',
+    'cute happy cartoon animals wearing clothes',
+    'cheerful cartoon dog with raincoat and boots',
+    'funny cartoon bear family getting ready',
+    'smiling cartoon kids jumping in puddles',
+    'cute animals playing in the weather',
+    'happy cartoon fox family on a walk',
+  ];
+  return subjects[day % subjects.length];
+}
+
 function generateImage(w) {
   const img = document.getElementById('weatherImg');
   const loading = document.getElementById('imgLoading');
-
   img.style.opacity = '0';
   loading.style.display = 'flex';
 
-  // Byg en sjov børnevenlig prompt baseret på vejret
+  const subject = getImageSubject();
   const season = getSeason();
   const prompt = encodeURIComponent(
-    `cute cartoon illustration, ${w.imgDesc}, ${season} in Denmark, happy children getting dressed for school, ` +
-    `cheerful colorful kids art style, warm and cozy family morning, no text, vibrant colors, flat illustration style`
+    `cute colorful cartoon illustration, ${w.imgDesc}, ${season}, ${subject}, ` +
+    `big happy smiles, warm cheerful colors, flat illustration style, no text, vibrant, child-friendly art`
   );
-
   const seed = new Date().toDateString().split('').reduce((a,c)=>a+c.charCodeAt(0),0);
   const url = `https://image.pollinations.ai/prompt/${prompt}?width=640&height=480&nologo=true&seed=${seed}&model=flux`;
 
-  const tempImg = new Image();
-  tempImg.onload = () => {
+  const tmp = new Image();
+  tmp.onload = () => {
     img.src = url;
     img.style.position = 'relative';
     img.style.opacity = '1';
     loading.style.display = 'none';
   };
-  tempImg.onerror = () => {
-    loading.innerHTML = `<div style="font-size:4rem">${w.icon}</div><div style="font-size:.75rem;color:rgba(232,228,216,.3);margin-top:.5rem">${w.desc}</div>`;
+  tmp.onerror = () => {
+    loading.innerHTML = `<div style="font-size:5rem">${w.icon}</div>`;
   };
-  tempImg.src = url;
-}
-
-function getSeason() {
-  const m = new Date().getMonth();
-  if (m >= 2 && m <= 4) return 'spring';
-  if (m >= 5 && m <= 7) return 'summer';
-  if (m >= 8 && m <= 10) return 'autumn';
-  return 'winter';
+  tmp.src = url;
 }
 
 function drawStars(code) {
@@ -318,37 +443,42 @@ function drawStars(code) {
 async function genMessage(w) {
   const n=new Date(), day=DAYS[n.getDay()], mon=MONTHS[n.getMonth()];
   const rain = w.precip>0||(w.code>=51&&w.code<=99);
+  const sunny = w.code<=2;
 
-  // Byggepiller til børn – max 4-5 korte pills
-  const prompt = `Du er på et familieskærm-dashboard for ${CFG.family}. I dag: ${day}, ${w.temp}°C (føles ${w.feels}°C), ${w.desc}${rain?', regn':''}.
+  const prompt = `Du er på et familieskærm for ${CFG.family}. I dag: ${day}, ${n.getDate()}. ${mon}, ${w.temp}°C (føles ${w.feels}°C), ${w.desc}${rain?', regn':''}.
 
-Returner JSON med:
-1. "pills": array med 3-5 MEGET korte beklædnings-tips til børn som ikoner + tekst. Fx: ["☀️ Solbriller","👕 T-shirt","🧴 Solcreme"]. Max 2-3 ord pr. pill. Basér på vejret.${w.temp>18&&w.code<=2?' Inkluder solcreme.':''}${rain?' Inkluder regnjakke.':''}${w.feels<10?' Inkluder varm jakke.':''}
-2. "adults": 1-2 sætninger. En varm, poetisk påmindelse om at nyde livet og nuet – relevant for ${day} og ${mon}.
+Returner JSON med disse tre felter:
 
-KUN JSON: {"pills":["...","..."],"adults":"..."}`;
+1. "motivation": En KORT, positiv og energigivende sætning til børnene Ella og Nora (som kan være lidt negative af sind). Max 1 sætning. Lad dem se det gode i dagen. Noget der får dem til at smile og tænke positivt. Skift stil fra dag til dag – sjov, opløftende, nysgerrig, kærlig.
+
+2. "pills": Array med 3-5 MEGET korte beklædnings-tips som ikoner + tekst. Max 2-3 ord pr. pill. Fx ["☀️ Solbriller","👕 T-shirt"].${sunny?' Inkluder solcreme.':''}${rain?' Inkluder regnjakke.':''}${w.feels<10?' Inkluder varm jakke.':''}
+
+3. "adults": 1-2 sætninger. En dyb, varm påmindelse om at leve livet fuldt ud – i ånden af én der ved at livet er skrøbeligt og ingen dag er garanteret. Vær til stede. Nyd de mennesker du elsker. Læg telefonen væk og vis virkelig op. De små øjeblikke er det hele. Relevant for ${day} og ${mon}. Varier fra dag til dag.
+
+KUN JSON: {"motivation":"...","pills":["..."],"adults":"..."}`;
 
   try {
-    document.getElementById('kidsPills').innerHTML = '<div class="pill">Genererer...</div>';
+    document.getElementById('motivationTxt').textContent = 'Henter...';
+    document.getElementById('kidsPills').innerHTML = '<div class="pill">...</div>';
     document.getElementById('adultTxt').textContent = '';
 
     const r = await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':CFG.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:300,messages:[{role:'user',content:prompt}]})
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,messages:[{role:'user',content:prompt}]})
     });
     if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e.error?.message||'HTTP '+r.status); }
     const d=await r.json(), txt=d.content?.[0]?.text||'';
     let p; try { const m=txt.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/); p=m?JSON.parse(m[0]):null; } catch(e){p=null;}
 
+    document.getElementById('motivationTxt').textContent = p?.motivation || '– I dag bliver en god dag! –';
     if (p?.pills && Array.isArray(p.pills)) {
       document.getElementById('kidsPills').innerHTML = p.pills.map(t=>`<div class="pill">${t}</div>`).join('');
-    } else {
-      document.getElementById('kidsPills').innerHTML = `<div class="pill">${w.icon} ${w.desc}</div>`;
     }
     document.getElementById('adultTxt').textContent = p?.adults || '';
   } catch(e) {
-    document.getElementById('kidsPills').innerHTML = `<div class="pill">Fejl – tjek API-nøgle (⚙)</div>`;
+    document.getElementById('motivationTxt').textContent = 'I dag bliver en super dag!';
+    document.getElementById('kidsPills').innerHTML = `<div class="pill">Tjek API-nøgle (⚙)</div>`;
     document.getElementById('adultTxt').textContent = e.message;
   }
 }
@@ -358,10 +488,30 @@ function setStatus(t,txt) {
   document.getElementById('updatedEl').textContent=txt;
 }
 
+function drawInitialStars() {
+  const cv = document.getElementById('stars'), ctx = cv.getContext('2d');
+  cv.width=window.innerWidth; cv.height=window.innerHeight;
+  for (let i=0;i<220;i++) {
+    ctx.beginPath(); ctx.arc(Math.random()*cv.width,Math.random()*cv.height,Math.random()*1.4,0,Math.PI*2);
+    ctx.fillStyle='#aabbdd'; ctx.globalAlpha=Math.random()*.5+.08; ctx.fill();
+  }
+  ctx.globalAlpha=1;
+}
+
 window.addEventListener('load',()=>{
-  try { const s=localStorage.getItem('fdCFG5'); if(s){CFG=JSON.parse(s);document.getElementById('setupEl').style.display='none';document.getElementById('dashEl').style.display='flex';document.getElementById('statusbar').style.display='flex';document.getElementById('gbtn').style.display='flex';initDash();} } catch(e){}
-  drawStars(2);
-  window.addEventListener('resize',()=>drawStars(2));
+  try {
+    const s=localStorage.getItem('fdCFG6');
+    if(s){
+      CFG=JSON.parse(s);
+      document.getElementById('setupEl').style.display='none';
+      document.getElementById('dashEl').style.display='flex';
+      document.getElementById('statusbar').style.display='flex';
+      document.getElementById('gbtn').style.display='flex';
+      initDash();
+    }
+  } catch(e){}
+  drawInitialStars();
+  window.addEventListener('resize', drawInitialStars);
 });
 </script>
 </body>
