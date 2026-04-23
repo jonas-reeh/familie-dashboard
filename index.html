@@ -9,7 +9,7 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'DM Sans', sans-serif; background: #0a0f1e; color: #e8e4d8; min-height: 100vh; }
   .bg { position: fixed; inset: 0; z-index: 0; background: linear-gradient(160deg, #0a0f1e 0%, #0d1832 40%, #0a1628 100%); }
-  .bg canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .55; }
+  .bg canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .5; }
   .page { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
 
   /* SETUP */
@@ -27,119 +27,103 @@
   .err { font-size: .8rem; color: rgba(255,140,140,.7); margin-top: .6rem; min-height: 1.2rem; }
 
   /* DASHBOARD */
-  .dash { display: none; flex-direction: column; flex: 1; padding: 1.6rem; gap: 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+  .dash { display: none; flex-direction: column; flex: 1; padding: 1.4rem 1.6rem; gap: .9rem; max-width: 1200px; margin: 0 auto; width: 100%; }
 
-  /* STOR DATO OG TID ØVERST */
-  .hero-date {
-    text-align: center;
-    padding: 1.2rem 0 .8rem;
-    border-bottom: 1px solid rgba(255,255,255,.06);
-    margin-bottom: .2rem;
-  }
-  .hero-dayname {
-    font-family: 'Playfair Display', serif;
-    font-size: 3.2rem;
-    font-weight: 600;
-    color: #f0ead8;
-    line-height: 1;
-    text-transform: capitalize;
-  }
-  .hero-datestr {
-    font-size: 1.1rem;
-    color: rgba(232,228,216,.45);
-    margin-top: .3rem;
-    letter-spacing: .02em;
-  }
-  .hero-time {
-    font-family: 'Playfair Display', serif;
-    font-size: 4.5rem;
-    font-weight: 400;
-    color: #e8b84b;
-    line-height: 1;
-    letter-spacing: -2px;
-    margin-top: .3rem;
-  }
-
-  /* HILSEN */
-  .greeting-bar {
-    text-align: center;
-    padding: .4rem 0;
-  }
-  .greeting-txt {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
-    font-style: italic;
-    color: rgba(232,228,216,.7);
-  }
-
-  /* VEJR ROW */
-  .weather-row {
+  /* TOP ROW: hilsen+vejr til venstre, dato+tid til højre */
+  .top-row {
     display: flex;
-    justify-content: center;
-    gap: 2rem;
-    align-items: center;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
   }
-  .wtemp { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 400; color: #f0ead8; line-height: 1; }
-  .winfo { display: flex; flex-direction: column; gap: .2rem; }
-  .wdesc { font-size: .9rem; color: rgba(232,228,216,.5); }
-  .wloc { font-size: .72rem; color: rgba(232,228,216,.28); }
-  .wextras { font-size: .75rem; color: rgba(232,228,216,.32); }
+
+  .left-block { display: flex; flex-direction: column; gap: .3rem; }
+  .greeting-txt { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-style: italic; color: rgba(232,228,216,.7); }
+  .weather-now { display: flex; align-items: baseline; gap: .8rem; margin-top: .3rem; }
+  .wtemp-big { font-family: 'Playfair Display', serif; font-size: 3.8rem; font-weight: 400; color: #f0ead8; line-height: 1; }
+  .winfo-col { display: flex; flex-direction: column; gap: .15rem; padding-bottom: .3rem; }
+  .wdesc { font-size: .95rem; color: rgba(232,228,216,.6); }
+  .wextras { font-size: .78rem; color: rgba(232,228,216,.35); }
+  .wloc { font-size: .68rem; color: rgba(232,228,216,.25); }
+
+  .right-block { text-align: right; flex-shrink: 0; }
+  .hero-dayname { font-family: 'Playfair Display', serif; font-size: 2.6rem; font-weight: 600; color: #f0ead8; line-height: 1; text-transform: capitalize; }
+  .hero-datestr { font-size: 1rem; color: rgba(232,228,216,.4); margin-top: .2rem; }
+  .hero-time { font-family: 'Playfair Display', serif; font-size: 4.2rem; font-weight: 400; color: #e8b84b; line-height: 1; letter-spacing: -2px; margin-top: .1rem; }
+
+  /* 3-TIMERS VEJRTIDSLINJE */
+  .forecast-bar {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px;
+    padding: .9rem 1.2rem;
+    overflow-x: auto;
+  }
+  .forecast-bar::-webkit-scrollbar { height: 3px; }
+  .forecast-bar::-webkit-scrollbar-track { background: transparent; }
+  .forecast-bar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 3px; }
+  .forecast-slots {
+    display: flex;
+    gap: 0;
+    min-width: max-content;
+  }
+  .fslot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .25rem;
+    padding: .4rem .9rem;
+    border-right: 1px solid rgba(255,255,255,.06);
+    min-width: 72px;
+  }
+  .fslot:last-child { border-right: none; }
+  .fslot.now { background: rgba(232,184,75,.08); border-radius: 10px; }
+  .fslot-time { font-size: .72rem; color: rgba(232,228,216,.38); font-variant-numeric: tabular-nums; }
+  .fslot-time.now-label { color: #e8b84b; font-weight: 500; }
+  .fslot-icon { font-size: 1.6rem; line-height: 1; }
+  .fslot-temp { font-size: 1rem; font-weight: 500; color: #f0ead8; }
+  .fslot-wind { font-size: .7rem; color: rgba(232,228,216,.35); }
 
   /* HERO GRID */
-  .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+  .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
   /* BILLEDBOKS */
-  .imgbox { border-radius: 18px; overflow: hidden; aspect-ratio: 4/3; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); position: relative; }
+  .imgbox { border-radius: 16px; overflow: hidden; aspect-ratio: 4/3; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); position: relative; }
   .imgbox img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity .6s; }
   .img-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .8rem; }
-  .img-spinner { width: 32px; height: 32px; border: 2px solid rgba(232,228,216,.1); border-top-color: #e8b84b; border-radius: 50%; animation: spin 1s linear infinite; }
+  .img-spinner { width: 28px; height: 28px; border: 2px solid rgba(232,228,216,.1); border-top-color: #e8b84b; border-radius: 50%; animation: spin 1s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .img-loading-txt { font-size: .75rem; color: rgba(232,228,216,.3); }
+  .img-loading-txt { font-size: .72rem; color: rgba(232,228,216,.28); }
 
   /* BESKEDBOKS */
-  .msgbox { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; padding: 1.4rem; display: flex; flex-direction: column; gap: 1rem; }
-  .section-head { font-size: .68rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: rgba(232,228,216,.3); margin-bottom: .4rem; }
+  .msgbox { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 1.2rem 1.4rem; display: flex; flex-direction: column; gap: .9rem; }
+  .section-head { font-size: .65rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: rgba(232,228,216,.28); margin-bottom: .3rem; }
 
-  /* MOTIVATION TIL BØRN */
-  .motivation-box {
-    background: rgba(232,184,75,.08);
-    border: 1px solid rgba(232,184,75,.2);
-    border-radius: 12px;
-    padding: .8rem 1rem;
-  }
-  .motivation-txt {
-    font-size: .95rem;
-    color: #f0ead8;
-    line-height: 1.5;
-    font-style: italic;
-  }
+  .motivation-box { background: rgba(232,184,75,.08); border: 1px solid rgba(232,184,75,.18); border-radius: 10px; padding: .7rem .9rem; }
+  .motivation-txt { font-size: .93rem; color: #f0ead8; line-height: 1.5; font-style: italic; }
 
-  /* PILLS */
-  .kids-pills { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .3rem; }
-  .pill { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); border-radius: 20px; padding: .3rem .8rem; font-size: .85rem; color: #e8e4d8; }
+  .kids-pills { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .2rem; }
+  .pill { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.11); border-radius: 20px; padding: .28rem .75rem; font-size: .82rem; color: #e8e4d8; }
 
-  /* VOKSEN */
-  .adult-box {
-    border-top: 1px solid rgba(255,255,255,.08);
-    padding-top: 1rem;
-  }
-  .adult-txt { font-size: .95rem; line-height: 1.65; color: rgba(232,228,216,.75); font-style: italic; }
+  .adult-box { border-top: 1px solid rgba(255,255,255,.07); padding-top: .9rem; }
+  .adult-txt { font-size: .92rem; line-height: 1.65; color: rgba(232,228,216,.72); font-style: italic; }
 
   /* STATUS */
-  .statusbar { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,.06); padding: .7rem 1.6rem; }
+  .statusbar { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,.05); padding: .6rem 1.6rem; }
   .sdot { width: 5px; height: 5px; border-radius: 50%; background: #4ade80; }
   .sdot.spin { background: #e8b84b; animation: pulse 1s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.25} }
-  .stext { font-size: .72rem; color: rgba(232,228,216,.28); display: flex; align-items: center; gap: .4rem; }
-  .rbtn { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 8px; padding: .32rem .7rem; color: rgba(232,228,216,.4); font-size: .72rem; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .2s; }
+  .stext { font-size: .7rem; color: rgba(232,228,216,.26); display: flex; align-items: center; gap: .4rem; }
+  .rbtn { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09); border-radius: 8px; padding: .3rem .65rem; color: rgba(232,228,216,.38); font-size: .7rem; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .2s; }
   .rbtn:hover { background: rgba(255,255,255,.1); color: rgba(232,228,216,.8); }
-  .gbtn { position: fixed; bottom: 1.2rem; right: 1.2rem; z-index: 10; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 50%; width: 38px; height: 38px; display: none; align-items: center; justify-content: center; cursor: pointer; font-size: .95rem; color: rgba(232,228,216,.35); }
+  .gbtn { position: fixed; bottom: 1.2rem; right: 1.2rem; z-index: 10; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 50%; width: 36px; height: 36px; display: none; align-items: center; justify-content: center; cursor: pointer; font-size: .9rem; color: rgba(232,228,216,.33); }
 
-  @media (max-width: 700px) {
+  @media (max-width: 750px) {
     .hero-grid { grid-template-columns: 1fr; }
-    .hero-dayname { font-size: 2.2rem; }
+    .hero-dayname { font-size: 1.8rem; }
     .hero-time { font-size: 3rem; }
-    .dash { padding: 1rem; }
+    .wtemp-big { font-size: 2.8rem; }
+    .dash { padding: .9rem; }
   }
 </style>
 </head>
@@ -167,25 +151,30 @@
 <!-- DASHBOARD -->
 <div class="dash" id="dashEl">
 
-  <!-- STOR DATO + TID -->
-  <div class="hero-date">
-    <div class="hero-dayname" id="heroDayname">Mandag</div>
-    <div class="hero-datestr" id="heroDatestr">den 23. april 2026</div>
-    <div class="hero-time" id="heroTime">06:30</div>
+  <!-- TOP ROW: venstre = hilsen + vejr, højre = dato + tid -->
+  <div class="top-row">
+    <div class="left-block">
+      <div class="greeting-txt" id="greetingTxt">God morgen, Ella, Nora og Liva!</div>
+      <div class="weather-now">
+        <div class="wtemp-big" id="wtempEl">–°</div>
+        <div class="winfo-col">
+          <div class="wdesc" id="wdescEl">Henter vejr...</div>
+          <div class="wextras" id="wextrasEl"></div>
+          <div class="wloc" id="wlocEl"></div>
+        </div>
+      </div>
+    </div>
+    <div class="right-block">
+      <div class="hero-dayname" id="heroDayname">Mandag</div>
+      <div class="hero-datestr" id="heroDatestr">den 23. april 2026</div>
+      <div class="hero-time" id="heroTime">06:30</div>
+    </div>
   </div>
 
-  <!-- HILSEN -->
-  <div class="greeting-bar">
-    <div class="greeting-txt" id="greetingTxt">God morgen, Ella, Nora og Liva!</div>
-  </div>
-
-  <!-- VEJR -->
-  <div class="weather-row">
-    <div class="wtemp" id="wtempEl">–°</div>
-    <div class="winfo">
-      <div class="wdesc" id="wdescEl">Henter vejr...</div>
-      <div class="wextras" id="wextrasEl"></div>
-      <div class="wloc" id="wlocEl"></div>
+  <!-- 3-TIMERS VEJRTIDSLINJE -->
+  <div class="forecast-bar">
+    <div class="forecast-slots" id="forecastSlots">
+      <div class="fslot"><div class="fslot-time">Henter...</div></div>
     </div>
   </div>
 
@@ -200,27 +189,20 @@
     </div>
 
     <div class="msgbox">
-
-      <!-- MOTIVATION TIL BØRN -->
       <div>
         <div class="section-head">Dagens tanke ⭐</div>
         <div class="motivation-box">
           <div class="motivation-txt" id="motivationTxt">Henter...</div>
         </div>
       </div>
-
-      <!-- BEKLÆDNING PILLS -->
       <div>
         <div class="section-head">Husk i dag 🎒</div>
         <div class="kids-pills" id="kidsPills"><div class="pill">Henter vejr...</div></div>
       </div>
-
-      <!-- VOKSEN PÅMINDELSE -->
       <div class="adult-box">
         <div class="section-head">Til de voksne ✨</div>
         <p class="adult-txt" id="adultTxt">Henter...</p>
       </div>
-
     </div>
   </div>
 
@@ -240,31 +222,35 @@ const DAYS = ['søndag','mandag','tirsdag','onsdag','torsdag','fredag','lørdag'
 const MONTHS = ['januar','februar','marts','april','maj','juni','juli','august','september','oktober','november','december'];
 
 const WMO = {
-  0:['Klar himmel','☀️','bright clear sunny sky, happy smiling sun'],
-  1:['Overvejende klart','🌤','mostly sunny sky with a few clouds'],
-  2:['Delvist skyet','⛅','partly cloudy sky with sunshine peeking through'],
-  3:['Overskyet','☁️','overcast cloudy grey sky'],
-  45:['Tåge','🌫','foggy misty morning, soft light'],
-  48:['Rimtåge','🌫','frosty foggy morning'],
-  51:['Let støvregn','🌦','light drizzle rain, small raindrops'],
-  53:['Støvregn','🌦','drizzle rainy day'],
-  55:['Kraftig støvregn','🌧','heavy drizzle rain'],
-  61:['Let regn','🌧','light rain, rain drops falling'],
-  63:['Regn','🌧','rainy day with puddles and raindrops'],
-  65:['Kraftig regn','🌧','heavy pouring rain'],
-  71:['Let sne','🌨','gentle snowfall, soft white snowflakes'],
-  73:['Snefald','❄️','snowfall, winter wonderland, snowflakes'],
-  75:['Kraftigt snefald','❄️','heavy snowstorm blizzard'],
-  80:['Lette byger','🌦','passing rain shower, clearing sky'],
-  81:['Byger','🌧','rain showers'],
-  82:['Kraftige byger','⛈','heavy rain showers, dramatic sky'],
-  85:['Snebyger','🌨','snow showers, snowflakes falling'],
-  95:['Tordenvejr','⛈','thunderstorm with lightning bolts'],
-  99:['Kraftigt tordenvejr','⛈','severe thunderstorm heavy lightning']
+  0:  ['Klar himmel',        '☀️',  'bright clear sunny sky, happy smiling sun'],
+  1:  ['Overvejende klart',  '🌤',  'mostly sunny sky with a few clouds'],
+  2:  ['Delvist skyet',      '⛅',  'partly cloudy sky with sunshine peeking through'],
+  3:  ['Overskyet',          '☁️',  'overcast cloudy grey sky'],
+  45: ['Tåge',               '🌫',  'foggy misty morning, soft light'],
+  48: ['Rimtåge',            '🌫',  'frosty foggy morning'],
+  51: ['Let støvregn',       '🌦',  'light drizzle rain, small raindrops'],
+  53: ['Støvregn',           '🌦',  'drizzle rainy day'],
+  55: ['Kraftig støvregn',   '🌧',  'heavy drizzle rain'],
+  61: ['Let regn',           '🌧',  'light rain, rain drops falling'],
+  63: ['Regn',               '🌧',  'rainy day with puddles and raindrops'],
+  65: ['Kraftig regn',       '🌧',  'heavy pouring rain'],
+  71: ['Let sne',            '🌨',  'gentle snowfall, soft white snowflakes'],
+  73: ['Snefald',            '❄️',  'snowfall, winter wonderland, snowflakes'],
+  75: ['Kraftigt snefald',   '❄️',  'heavy snowstorm blizzard'],
+  77: ['Sne korn',           '🌨',  'snow grains falling'],
+  80: ['Lette byger',        '🌦',  'passing rain shower, clearing sky'],
+  81: ['Byger',              '🌧',  'rain showers'],
+  82: ['Kraftige byger',     '⛈',  'heavy rain showers, dramatic sky'],
+  85: ['Snebyger',           '🌨',  'snow showers, snowflakes falling'],
+  86: ['Kraftige snebyger',  '❄️',  'heavy snow showers blizzard'],
+  95: ['Tordenvejr',         '⛈',  'thunderstorm with lightning bolts'],
+  96: ['Tordenvejr m. hagl', '⛈',  'thunderstorm with hail'],
+  99: ['Kraftigt tordenvejr','⛈',  'severe thunderstorm heavy lightning']
 };
 
 const COORDS = {
   'københavn':[55.676,12.568],'kobenhavn':[55.676,12.568],'copenhagen':[55.676,12.568],
+  'tissø':[55.594,11.306],'tissoe':[55.594,11.306],
   'aarhus':[56.162,10.203],'arhus':[56.162,10.203],'odense':[55.396,10.388],
   'aalborg':[57.048,9.921],'esbjerg':[55.467,8.452],'randers':[56.461,10.036],
   'kolding':[55.490,9.472],'horsens':[55.860,9.849],'vejle':[55.709,9.536],
@@ -274,6 +260,7 @@ const COORDS = {
   'birkerød':[55.842,12.428],'birkerod':[55.842,12.428],'allerød':[55.868,12.351],
   'holte':[55.808,12.470],'vedbæk':[55.848,12.564],'vedbaek':[55.848,12.564],
   'charlottenlund':[55.757,12.587],'taastrup':[55.652,12.300],'greve':[55.590,12.299],
+  'kalundborg':[55.680,11.089],'slagelse':[55.403,11.354],'sorø':[55.430,11.556],
 };
 
 function getCoords(city) {
@@ -285,14 +272,12 @@ function getCoords(city) {
 
 function getGreeting(names) {
   const h = new Date().getHours();
-  let prefix;
-  if (h >= 5 && h < 10) prefix = 'God morgen';
-  else if (h >= 10 && h < 12) prefix = 'God formiddag';
-  else if (h >= 12 && h < 14) prefix = 'God middag';
-  else if (h >= 14 && h < 18) prefix = 'God eftermiddag';
-  else if (h >= 18 && h < 22) prefix = 'God aften';
-  else prefix = 'God nat';
-  return `${prefix}, ${names}!`;
+  if (h>=5&&h<10)  return `God morgen, ${names}!`;
+  if (h>=10&&h<12) return `God formiddag, ${names}!`;
+  if (h>=12&&h<14) return `God middag, ${names}!`;
+  if (h>=14&&h<18) return `God eftermiddag, ${names}!`;
+  if (h>=18&&h<22) return `God aften, ${names}!`;
+  return `God nat, ${names}!`;
 }
 
 function updateClock() {
@@ -300,36 +285,34 @@ function updateClock() {
   const h = String(n.getHours()).padStart(2,'0');
   const m = String(n.getMinutes()).padStart(2,'0');
   const dayName = DAYS[n.getDay()];
-  const dateStr = `den ${n.getDate()}. ${MONTHS[n.getMonth()]} ${n.getFullYear()}`;
-
-  document.getElementById('heroDayname').textContent = dayName.charAt(0).toUpperCase() + dayName.slice(1);
-  document.getElementById('heroDatestr').textContent = dateStr;
+  document.getElementById('heroDayname').textContent = dayName.charAt(0).toUpperCase()+dayName.slice(1);
+  document.getElementById('heroDatestr').textContent = `den ${n.getDate()}. ${MONTHS[n.getMonth()]} ${n.getFullYear()}`;
   document.getElementById('heroTime').textContent = `${h}:${m}`;
-  document.getElementById('greetingTxt').textContent = getGreeting(CFG.family || 'alle');
+  document.getElementById('greetingTxt').textContent = getGreeting(CFG.family||'alle');
 }
 
 function startDash() {
   const apiKey = document.getElementById('apiKey').value.trim();
-  const city = document.getElementById('cityIn').value.trim() || 'København';
+  const city   = document.getElementById('cityIn').value.trim() || 'København';
   const family = document.getElementById('familyIn').value.trim() || 'Ella, Nora og Liva';
   if (!apiKey) { document.getElementById('setupErr').textContent = 'Udfyld din Anthropic API-nøgle.'; return; }
   const coords = getCoords(city);
   CFG = { apiKey, city, family, lat: coords[0], lon: coords[1] };
-  try { localStorage.setItem('fdCFG6', JSON.stringify(CFG)); } catch(e) {}
+  try { localStorage.setItem('fdCFG7', JSON.stringify(CFG)); } catch(e) {}
   document.getElementById('setupEl').style.display = 'none';
-  document.getElementById('dashEl').style.display = 'flex';
+  document.getElementById('dashEl').style.display  = 'flex';
   document.getElementById('statusbar').style.display = 'flex';
-  document.getElementById('gbtn').style.display = 'flex';
+  document.getElementById('gbtn').style.display    = 'flex';
   initDash();
 }
 
 function showSetup() {
-  document.getElementById('dashEl').style.display = 'none';
+  document.getElementById('dashEl').style.display   = 'none';
   document.getElementById('statusbar').style.display = 'none';
-  document.getElementById('gbtn').style.display = 'none';
-  document.getElementById('setupEl').style.display = 'flex';
-  if (CFG.apiKey) document.getElementById('apiKey').value = CFG.apiKey;
-  if (CFG.city) document.getElementById('cityIn').value = CFG.city;
+  document.getElementById('gbtn').style.display     = 'none';
+  document.getElementById('setupEl').style.display  = 'flex';
+  if (CFG.apiKey) document.getElementById('apiKey').value   = CFG.apiKey;
+  if (CFG.city)   document.getElementById('cityIn').value   = CFG.city;
   if (CFG.family) document.getElementById('familyIn').value = CFG.family;
 }
 
@@ -358,23 +341,84 @@ async function refreshAll() {
 
 async function fetchWeather() {
   try {
-    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${CFG.lat}&longitude=${CFG.lon}&current=temperature_2m,weathercode,windspeed_10m,relativehumidity_2m,apparent_temperature,precipitation&timezone=Europe/Copenhagen&wind_speed_unit=ms`);
+    const url = `https://api.open-meteo.com/v1/forecast`
+      + `?latitude=${CFG.lat}&longitude=${CFG.lon}`
+      + `&current=temperature_2m,weathercode,windspeed_10m,relativehumidity_2m,apparent_temperature,precipitation`
+      + `&hourly=temperature_2m,weathercode,windspeed_10m`
+      + `&timezone=Europe/Copenhagen&wind_speed_unit=ms&forecast_days=2`;
+    const r = await fetch(url);
     if (!r.ok) throw new Error('HTTP '+r.status);
-    const d = await r.json(); const c = d.current;
-    const temp=Math.round(c.temperature_2m), feels=Math.round(c.apparent_temperature);
-    const wind=Math.round(c.windspeed_10m), hum=Math.round(c.relativehumidity_2m);
-    const code=c.weathercode, precip=c.precipitation||0;
-    const info = WMO[code] || ['Ukendt','🌡','weather'];
+    const d = await r.json();
+    const c = d.current;
+
+    const temp  = Math.round(c.temperature_2m);
+    const feels = Math.round(c.apparent_temperature);
+    const wind  = Math.round(c.windspeed_10m);
+    const hum   = Math.round(c.relativehumidity_2m);
+    const code  = c.weathercode;
+    const precip = c.precipitation || 0;
+    const info  = WMO[code] || ['Ukendt','🌡','weather'];
     const [desc, icon, imgDesc] = info;
-    document.getElementById('wtempEl').textContent = temp+'°';
-    document.getElementById('wdescEl').textContent = desc+' '+icon;
-    document.getElementById('wlocEl').textContent = 'Open-Meteo · '+CFG.city;
+
+    document.getElementById('wtempEl').textContent  = temp+'°';
+    document.getElementById('wdescEl').textContent  = desc+' '+icon;
+    document.getElementById('wlocEl').textContent   = 'Open-Meteo · '+CFG.city;
     document.getElementById('wextrasEl').textContent = `Føles som ${feels}° · Vind ${wind} m/s · Fugt ${hum}%`;
+
+    // Byg 3-timers tidslinje
+    buildForecast(d.hourly, code);
     drawStars(code);
-    return {temp,feels,wind,hum,precip,desc,icon,imgDesc,code};
+    return { temp, feels, wind, hum, precip, desc, icon, imgDesc, code };
   } catch(e) {
-    document.getElementById('wdescEl').textContent = 'Vejr utilgængeligt';
+    document.getElementById('wdescEl').textContent = 'Vejr utilgængeligt: '+e.message;
     return null;
+  }
+}
+
+function buildForecast(hourly, currentCode) {
+  const now = new Date();
+  const currentHour = now.getHours();
+  const slots = document.getElementById('forecastSlots');
+  slots.innerHTML = '';
+
+  // Find start-index i hourly data (dagens timer fra nu)
+  const times = hourly.time; // array af "2026-04-23T00:00" osv.
+  const temps  = hourly.temperature_2m;
+  const codes  = hourly.weathercode;
+  const winds  = hourly.windspeed_10m;
+
+  // Find indeks for nuværende time
+  const nowStr = now.toISOString().slice(0,13); // "2026-04-23T10"
+  let startIdx = times.findIndex(t => t.startsWith(nowStr));
+  if (startIdx < 0) startIdx = 0;
+
+  // Vis 8 slots med 3-timers interval (ca. 24 timer frem)
+  let count = 0;
+  for (let i = startIdx; i < times.length && count < 9; i += 3) {
+    const timeStr = times[i]; // "2026-04-23T10:00"
+    const slotHour = parseInt(timeStr.slice(11,13));
+    const isNow = (count === 0);
+
+    const slotTemp = Math.round(temps[i]);
+    const slotCode = codes[i];
+    const slotWind = Math.round(winds[i]);
+    const slotIcon = (WMO[slotCode] || ['','🌡'])[1];
+
+    // Formatér tid
+    const slotDate = new Date(timeStr);
+    const dayLabel = slotDate.getDate() !== now.getDate() ? ' (+1)' : '';
+    const timeLabel = isNow ? 'Nu' : `${String(slotHour).padStart(2,'0')}:00${dayLabel}`;
+
+    const div = document.createElement('div');
+    div.className = 'fslot' + (isNow ? ' now' : '');
+    div.innerHTML = `
+      <div class="fslot-time ${isNow?'now-label':''}">${timeLabel}</div>
+      <div class="fslot-icon">${slotIcon}</div>
+      <div class="fslot-temp">${slotTemp}°</div>
+      <div class="fslot-wind">${slotWind} m/s</div>
+    `;
+    slots.appendChild(div);
+    count++;
   }
 }
 
@@ -386,17 +430,17 @@ function getSeason() {
   return 'winter';
 }
 
-// Skifter mellem dyr og mennesker baseret på datoen
 function getImageSubject() {
   const day = new Date().getDate();
   const subjects = [
-    'happy smiling children getting dressed',
-    'cute happy cartoon animals wearing clothes',
-    'cheerful cartoon dog with raincoat and boots',
-    'funny cartoon bear family getting ready',
-    'smiling cartoon kids jumping in puddles',
-    'cute animals playing in the weather',
-    'happy cartoon fox family on a walk',
+    'happy smiling children getting dressed for school',
+    'cute happy cartoon animals wearing clothes and accessories',
+    'cheerful cartoon dog family with raincoat and boots',
+    'funny cartoon bear family getting ready for the day',
+    'smiling cartoon kids jumping and playing outside',
+    'cute cartoon fox family dressed for the weather',
+    'happy cartoon bunny family on a morning walk',
+    'adorable cartoon hedgehog family in cozy clothes',
   ];
   return subjects[day % subjects.length];
 }
@@ -408,19 +452,20 @@ function generateImage(w) {
   loading.style.display = 'flex';
 
   const subject = getImageSubject();
-  const season = getSeason();
-  const prompt = encodeURIComponent(
-    `cute colorful cartoon illustration, ${w.imgDesc}, ${season}, ${subject}, ` +
-    `big happy smiles, warm cheerful colors, flat illustration style, no text, vibrant, child-friendly art`
+  const season  = getSeason();
+  const prompt  = encodeURIComponent(
+    `cute colorful cartoon illustration, ${w.imgDesc}, ${season} in Denmark, `+
+    `${subject}, big happy smiles, warm cheerful colors, flat illustration style, `+
+    `no text, vibrant, child-friendly art, high quality`
   );
   const seed = new Date().toDateString().split('').reduce((a,c)=>a+c.charCodeAt(0),0);
-  const url = `https://image.pollinations.ai/prompt/${prompt}?width=640&height=480&nologo=true&seed=${seed}&model=flux`;
+  const url  = `https://image.pollinations.ai/prompt/${prompt}?width=640&height=480&nologo=true&seed=${seed}&model=flux`;
 
   const tmp = new Image();
   tmp.onload = () => {
     img.src = url;
     img.style.position = 'relative';
-    img.style.opacity = '1';
+    img.style.opacity  = '1';
     loading.style.display = 'none';
   };
   tmp.onerror = () => {
@@ -430,30 +475,37 @@ function generateImage(w) {
 }
 
 function drawStars(code) {
-  const cv = document.getElementById('stars'), ctx = cv.getContext('2d');
-  cv.width=window.innerWidth; cv.height=window.innerHeight;
+  const cv  = document.getElementById('stars');
+  const ctx = cv.getContext('2d');
+  cv.width  = window.innerWidth;
+  cv.height = window.innerHeight;
   const col = code>=51 ? '#8899cc' : code<=1 ? '#ffd080' : '#aabbdd';
-  for (let i=0;i<220;i++) {
-    ctx.beginPath(); ctx.arc(Math.random()*cv.width,Math.random()*cv.height,Math.random()*1.4,0,Math.PI*2);
-    ctx.fillStyle=col; ctx.globalAlpha=Math.random()*.55+.08; ctx.fill();
+  for (let i=0; i<220; i++) {
+    ctx.beginPath();
+    ctx.arc(Math.random()*cv.width, Math.random()*cv.height, Math.random()*1.4, 0, Math.PI*2);
+    ctx.fillStyle = col;
+    ctx.globalAlpha = Math.random()*.55+.08;
+    ctx.fill();
   }
-  ctx.globalAlpha=1;
+  ctx.globalAlpha = 1;
 }
 
 async function genMessage(w) {
-  const n=new Date(), day=DAYS[n.getDay()], mon=MONTHS[n.getMonth()];
-  const rain = w.precip>0||(w.code>=51&&w.code<=99);
-  const sunny = w.code<=2;
+  const n   = new Date();
+  const day = DAYS[n.getDay()];
+  const mon = MONTHS[n.getMonth()];
+  const rain   = w.precip>0 || (w.code>=51&&w.code<=99);
+  const sunny  = w.code<=2;
 
   const prompt = `Du er på et familieskærm for ${CFG.family}. I dag: ${day}, ${n.getDate()}. ${mon}, ${w.temp}°C (føles ${w.feels}°C), ${w.desc}${rain?', regn':''}.
 
-Returner JSON med disse tre felter:
+Returner JSON med:
 
-1. "motivation": En KORT, positiv og energigivende sætning til børnene Ella og Nora (som kan være lidt negative af sind). Max 1 sætning. Lad dem se det gode i dagen. Noget der får dem til at smile og tænke positivt. Skift stil fra dag til dag – sjov, opløftende, nysgerrig, kærlig.
+1. "motivation": En KORT, positiv og energigivende sætning til børnene Ella og Nora (som kan være lidt negative af sind). Max 1 sætning. Lad dem se det gode i dagen. Skift stil fra dag til dag – sjov, opløftende, nysgerrig, kærlig.
 
-2. "pills": Array med 3-5 MEGET korte beklædnings-tips som ikoner + tekst. Max 2-3 ord pr. pill. Fx ["☀️ Solbriller","👕 T-shirt"].${sunny?' Inkluder solcreme.':''}${rain?' Inkluder regnjakke.':''}${w.feels<10?' Inkluder varm jakke.':''}
+2. "pills": Array med 3-5 MEGET korte beklædnings-tips som ikoner + tekst. Max 2-3 ord pr. pill. Fx ["☀️ Solbriller","👕 T-shirt"].${sunny?' Inkluder 🧴 Solcreme.':''}${rain?' Inkluder 🌂 Regnjakke.':''}${w.feels<10?' Inkluder 🧥 Varm jakke.':''}
 
-3. "adults": 1-2 sætninger. En dyb, varm påmindelse om at leve livet fuldt ud – i ånden af én der ved at livet er skrøbeligt og ingen dag er garanteret. Vær til stede. Nyd de mennesker du elsker. Læg telefonen væk og vis virkelig op. De små øjeblikke er det hele. Relevant for ${day} og ${mon}. Varier fra dag til dag.
+3. "adults": 1-2 sætninger. En dyb, varm påmindelse om at leve livet fuldt ud – i ånden af én der ved at livet er skrøbeligt og ingen dag er garanteret. Vær til stede. Nyd de mennesker du elsker. Læg telefonen væk. De små øjeblikke er det hele. Relevant for ${day} og ${mon}. Varier budskabet fra dag til dag.
 
 KUN JSON: {"motivation":"...","pills":["..."],"adults":"..."}`;
 
@@ -462,14 +514,26 @@ KUN JSON: {"motivation":"...","pills":["..."],"adults":"..."}`;
     document.getElementById('kidsPills').innerHTML = '<div class="pill">...</div>';
     document.getElementById('adultTxt').textContent = '';
 
-    const r = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':CFG.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,messages:[{role:'user',content:prompt}]})
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': CFG.apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 400,
+        messages: [{ role: 'user', content: prompt }]
+      })
     });
     if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e.error?.message||'HTTP '+r.status); }
-    const d=await r.json(), txt=d.content?.[0]?.text||'';
-    let p; try { const m=txt.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/); p=m?JSON.parse(m[0]):null; } catch(e){p=null;}
+    const d = await r.json();
+    const txt = d.content?.[0]?.text || '';
+    let p;
+    try { const m=txt.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/); p=m?JSON.parse(m[0]):null; }
+    catch(e) { p=null; }
 
     document.getElementById('motivationTxt').textContent = p?.motivation || '– I dag bliver en god dag! –';
     if (p?.pills && Array.isArray(p.pills)) {
@@ -478,38 +542,43 @@ KUN JSON: {"motivation":"...","pills":["..."],"adults":"..."}`;
     document.getElementById('adultTxt').textContent = p?.adults || '';
   } catch(e) {
     document.getElementById('motivationTxt').textContent = 'I dag bliver en super dag!';
-    document.getElementById('kidsPills').innerHTML = `<div class="pill">Tjek API-nøgle (⚙)</div>`;
+    document.getElementById('kidsPills').innerHTML = `<div class="pill">Fejl – tjek API-nøgle (⚙)</div>`;
     document.getElementById('adultTxt').textContent = e.message;
   }
 }
 
-function setStatus(t,txt) {
-  document.getElementById('sdot').className='sdot'+(t==='load'?' spin':'');
-  document.getElementById('updatedEl').textContent=txt;
+function setStatus(t, txt) {
+  document.getElementById('sdot').className = 'sdot'+(t==='load'?' spin':'');
+  document.getElementById('updatedEl').textContent = txt;
 }
 
 function drawInitialStars() {
-  const cv = document.getElementById('stars'), ctx = cv.getContext('2d');
-  cv.width=window.innerWidth; cv.height=window.innerHeight;
-  for (let i=0;i<220;i++) {
-    ctx.beginPath(); ctx.arc(Math.random()*cv.width,Math.random()*cv.height,Math.random()*1.4,0,Math.PI*2);
-    ctx.fillStyle='#aabbdd'; ctx.globalAlpha=Math.random()*.5+.08; ctx.fill();
+  const cv  = document.getElementById('stars');
+  const ctx = cv.getContext('2d');
+  cv.width  = window.innerWidth;
+  cv.height = window.innerHeight;
+  for (let i=0; i<220; i++) {
+    ctx.beginPath();
+    ctx.arc(Math.random()*cv.width, Math.random()*cv.height, Math.random()*1.4, 0, Math.PI*2);
+    ctx.fillStyle = '#aabbdd';
+    ctx.globalAlpha = Math.random()*.5+.08;
+    ctx.fill();
   }
-  ctx.globalAlpha=1;
+  ctx.globalAlpha = 1;
 }
 
-window.addEventListener('load',()=>{
+window.addEventListener('load', () => {
   try {
-    const s=localStorage.getItem('fdCFG6');
-    if(s){
-      CFG=JSON.parse(s);
-      document.getElementById('setupEl').style.display='none';
-      document.getElementById('dashEl').style.display='flex';
-      document.getElementById('statusbar').style.display='flex';
-      document.getElementById('gbtn').style.display='flex';
+    const s = localStorage.getItem('fdCFG7');
+    if (s) {
+      CFG = JSON.parse(s);
+      document.getElementById('setupEl').style.display   = 'none';
+      document.getElementById('dashEl').style.display    = 'flex';
+      document.getElementById('statusbar').style.display = 'flex';
+      document.getElementById('gbtn').style.display      = 'flex';
       initDash();
     }
-  } catch(e){}
+  } catch(e) {}
   drawInitialStars();
   window.addEventListener('resize', drawInitialStars);
 });
